@@ -1,0 +1,134 @@
+<div class="container col-sm-10" style="font-size: 11px">
+	<div class="row">
+		<div class="col-md-9">
+			<div class="row">
+				<form class="form-inline" style="text-align: left">
+					<div class="form-group col-md-6">
+						<label for="email">Cliente:</label> <select
+							class="form-control input-sm" ng-model="indice"
+							style="width: inherit;">
+							<option value="-1">Otro...</option>
+							<option ng-repeat="cliente in clientes" value="{{$index}}">{{cliente.nombre}}</option>
+						</select>
+						<button class="btn btn-primary" ng-click="cargaClientes()"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></button>
+					</div>
+					<div class="form-group col-md-6">
+						<div class="row" style="padding-left: 60px">
+							<select class="form-control input-sm" ng-model="busquedas.tipo" style="width: inherit;">
+								<option selected>Articulos</option>
+							<!-- 	<option>Tornillos</option> -->
+							</select>
+						</div>
+						<label for="email">Buscar:</label> <input type="text"
+							class="form-control input-sm" id="buscar"
+							ng-model="busquedas.buscar">
+						<button type="submit" class="btn btn-primary"
+							ng-click="buscar(busquedas)" ng-disabled="botonBuscar">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+						<button type="submit" class="btn btn-primary"
+							data-toggle="tooltip" title="Mostrar Todos"
+							ng-click="cargarPagina(1)">
+							<span class="glyphicon glyphicon-eye-open"></span>
+						</button>
+					</div>
+				</form>
+			</div>
+			<div class="row">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Clave</th>
+							<th>Articulo</th>
+							<th>Medidas</th>
+							<th>Precio</th>
+							<th>$</th>
+							<th>Existencia</th>
+							<th>Cantidad</th>
+							<th>Importe</th>
+							<th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="producto in productos">
+							<td>{{producto.clave}}</td>
+							<td>{{producto.nombre}}</td>
+							<td>{{producto.medidas}}</td>
+							<td><select ng-model="producto.precio" ng-change="producto.importe= calculaImporte(producto)">
+									<option ng-value="producto.precioMostrador">Mostrador</option>
+									<option ng-value="producto.precioMayoreo">Mayoreo</option>
+									<option ng-value="producto.precioCredito">Cr&eacute;dito</option>
+							</select></td>
+							<td>{{producto.precio}}</td>
+							<td>{{producto.existencia}}</td>
+							<td><input type="text" ng-model="producto.cantidad"
+								ng-change="producto.importe= calculaImporte(producto)"></td>
+							<td><input type="text" ng-model="producto.importe"></td>
+							<td>
+								<button type="button" class="btn btn-default btn-sm"
+									ng-click="agregarDetalle(producto)">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div ng-show="todos">
+					<ul class="pagination .pagination-sm">
+						<li ng-repeat="abc in paginas" id="{{'pag'+abc}}"
+							ng-click="cargarPagina(abc)"><a>{{abc}}</a></li>
+
+					</ul>
+				</div>
+			</div>
+			<hr>
+			<div class="row"></div>
+		</div>
+
+		<div class="col-md-3">
+			<div class="well well-sm">
+				<h4>Venta</h4>
+				<table class="table table-stripped">
+					<tbody>
+						<tr>
+<!-- 							<td>Fecha:</td> -->
+<!-- 							<td>{{venta.fecha}}</td> -->
+
+						</tr>
+						
+						<tr ng-repeat="det in venta.detalles">
+							<td>{{det.descripcion}}</td>
+							<td>{{det.cantidad}}</td>
+							<td>{{det.importe}}</td>
+							<td><a ng-click="quitaConcepto($index)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+						</tr>
+						<tr><td><b>Total</b></td>
+							<td></td>
+							<td>{{venta.total}}</td>
+						</tr>
+						<tr ng-show="venta.descuento>0"><td><input type="checkbox" ng-click="calculaDesc()" ng-model="descuento" >Aplicar Descuento</td></tr>
+					</tbody>
+				</table>
+				<label ng_hide="MetodoPago">Metodo de Pago:</label>
+					<select class="pago"
+						ng-model="venta.formaDePago" ng_hide="MetodoPago">
+						<option>Tarjeta de Cr&eacute;dito</option>
+						<option>Tarjeta de D&eacute;bito</option>
+						<option>Efectivo</option>
+						<option>Transferencia</option>
+						<option>Cheque</option>
+						<option>Cr&eacute;dito</option>						
+					</select><br>
+				
+					<label ng_hide="MetodoPago">Forma de Pago:</label>
+					<select class="pago"
+						ng-model="venta.metodoDePago" ng_hide="MetodoPago">
+						<option value="PUE">Pago en una sola exhibici&oacute;n</option>
+						<option value="PPD">Pago en parcialidades o diferido</option>
+					</select><br>
+				<button class="btn btn-small btn-primary" ng-click="guardarVenta('VENDIDO')">Guardar Venta</button>
+				<button class="btn btn-small btn-info" ng-click="guardarVenta('GENERADO')">Presupuesto</button>
+			</div>
+		</div>
+	</div>
+</div>
