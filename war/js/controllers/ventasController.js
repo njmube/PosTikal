@@ -192,7 +192,19 @@ app.service("ventasService",['$http','$q',function($http,$q){
 app.controller("ventaController",['$window','clientesService','ventasService','tornillosService','herramientasService','$scope','$location',function($window,clientesService,ventasService,tornillosService,herramientasService,$scope,$location){
 	$scope.MetodoPago=true;
 	$scope.paginaActual=1;
-	
+	$scope.comision = "0";
+	$scope.setComision = function(){
+		$scope.comision = $scope.comision * 1;
+		var op = 0
+		if($scope.comision == 0){
+			
+		}else{
+		for(i in $scope.venta.detalles){	
+			op = ($scope.venta.detalles[i].importe * 100) / $scope.comision;
+			$scope.venta.detalles[i].importe = $scope.venta.detalles[i].importe + op;
+		}
+		}
+	}
 	$scope.llenarPags=function(){
 		var inicio=0;
 		if($scope.paginaActual>3){

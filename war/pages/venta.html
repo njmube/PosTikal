@@ -83,6 +83,15 @@
 			</div>
 			<hr>
 			<div class="row"></div>
+				<div class="row">
+			
+			<div class="col-md-6">
+								Direccion:<br> <input type="text" class="form-control"ng-model="venta.direccion">
+			</div>
+			<div class="col-md-6">
+								Condiciones:<br> <textarea rows="5" cols="90" ng-model="venta.condiciones"></textarea>
+			</div>
+			</div>
 		</div>
 
 		<div class="col-md-3">
@@ -118,6 +127,13 @@
 						<option>Transferencia</option>
 						<option>Cheque</option>
 						<option>Cr&eacute;dito</option>						
+					</select><br>
+					<label ng_hide="MetodoPago">Comosiones:</label>
+					<select class="pago" ng-model="comision" ng_hide="MetodoPago" ng-change="setComision()">
+						<option selected value="0">Ninguno</option>
+						<option value="1.2">1.2%</option>
+						<option value="1.5">1.5%</option>
+						<option value="3.5">3.5%</option>					
 					</select><br>
 				
 					<label ng_hide="MetodoPago">Forma de Pago:</label>
