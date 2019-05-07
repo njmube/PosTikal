@@ -63,7 +63,10 @@
 							<td>{{producto.existencia}}</td>
 							<td><input type="text" ng-model="producto.cantidad"
 								ng-change="producto.importe= calculaImporte(producto)"></td>
-							<td><input type="text" ng-model="producto.importe"></td>
+							<td>
+							{{producto.importe}}
+<!-- 							<input type="text" ng-model="producto.importe" readonly="readonly"> -->
+							</td>
 							<td>
 								<button type="button" class="btn btn-default btn-sm"
 									ng-click="agregarDetalle(producto)">
@@ -108,12 +111,12 @@
 						<tr ng-repeat="det in venta.detalles">
 							<td>{{det.descripcion}}</td>
 							<td>{{det.cantidad}}</td>
-							<td>{{det.importe}}</td>
+							<td>{{det.importe | currency}}</td>
 							<td><a ng-click="quitaConcepto($index)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
 						</tr>
 						<tr><td><b>Total</b></td>
 							<td></td>
-							<td>{{venta.total}}</td>
+							<td>{{venta.total | currency}}</td>
 						</tr>
 						<tr ng-show="venta.descuento>0"><td><input type="checkbox" ng-click="calculaDesc()" ng-model="descuento" >Aplicar Descuento</td></tr>
 					</tbody>
@@ -131,9 +134,9 @@
 					<label ng_hide="MetodoPago">Comosiones:</label>
 					<select class="pago" ng-model="comision" ng_hide="MetodoPago" ng-change="setComision()">
 						<option selected value="0">Ninguno</option>
-						<option value="1.2">1.2%</option>
-						<option value="1.5">1.5%</option>
-						<option value="3.5">3.5%</option>					
+						<option value="1.2">Credito 1.2%</option>
+						<option value="1.5">Debito 1.5%</option>
+						<option value="3.5">A.Express 3.5%</option>					
 					</select><br>
 				
 					<label ng_hide="MetodoPago">Forma de Pago:</label>

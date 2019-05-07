@@ -194,15 +194,25 @@ app.controller("ventaController",['$window','clientesService','ventasService','t
 	$scope.paginaActual=1;
 	$scope.comision = "0";
 	$scope.setComision = function(){
-		$scope.comision = $scope.comision * 1;
+		var comision = $scope.comision * 1;
 		var op = 0
-		if($scope.comision == 0){
-			
+		if(comision == 0){
+			for(i in $scope.venta.detalles){
+			$scope.venta.detalles[i].precioUnitario = $scope.venta.detalles[i]._precioUnitario;
+			$scope.venta.detalles[i].importe = ($scope.venta.detalles[i].cantidad * 1) * ($scope.venta.detalles[i].precioUnitario * 1)
+			}
 		}else{
 		for(i in $scope.venta.detalles){	
-			op = ($scope.venta.detalles[i].importe * 100) / $scope.comision;
-			$scope.venta.detalles[i].importe = $scope.venta.detalles[i].importe + op;
+			op = (($scope.venta.detalles[i]._precioUnitario * 1) * comision) / 100;
+			$scope.venta.detalles[i].precioUnitario = ($scope.venta.detalles[i]._precioUnitario * 1) + op;
+			$scope.venta.detalles[i].precioUnitario = Math.round($scope.venta.detalles[i].precioUnitario * 100) / 100
+			$scope.venta.detalles[i].importe = ($scope.venta.detalles[i].cantidad * 1) * ($scope.venta.detalles[i].precioUnitario * 1)
+			$scope.venta.detalles[i].importe = Math.round($scope.venta.detalles[i].importe * 100) / 100
 		}
+		}
+		for(var i=0; i<$scope.venta.detalles.length; i++){
+			$scope.venta.total+=	parseFloat($scope.venta.detalles[i].importe);
+			$scope.venta.total=parseFloat($scope.venta.total.toFixed(2));
 		}
 	}
 	$scope.llenarPags=function(){
@@ -327,6 +337,7 @@ app.controller("ventaController",['$window','clientesService','ventasService','t
 		}
 		detalle.cantidad=producto.cantidad;
 		detalle.precioUnitario=producto.precio;
+		detalle._precioUnitario= producto.precio
 		detalle.importe= producto.importe;
 		detalle.claveUnidad=producto.claveUnidad;
 		detalle.claveSat=producto.claveSat;
@@ -339,6 +350,7 @@ app.controller("ventaController",['$window','clientesService','ventasService','t
 		detalle.tipo=producto.tipo;
 		$scope.venta.detalles.push(detalle);
 		$scope.venta.total=0;
+		$scope.setComision();
 		for(var i=0; i<$scope.venta.detalles.length; i++){
 			$scope.venta.total+=	parseFloat($scope.venta.detalles[i].importe);
 			$scope.venta.total=parseFloat($scope.venta.total.toFixed(2));
@@ -392,6 +404,9 @@ app.controller("ventaController",['$window','clientesService','ventasService','t
 	}
 	
 	$scope.calculaImporte=function(producto){
+		if(!producto.cantidad){
+			return 0
+		}
 		var valor=producto.cantidad*producto.precio;
 		
 		return valor.toFixed(2)*1;
@@ -409,7 +424,7 @@ app.controller("ventaController",['$window','clientesService','ventasService','t
 			ventasService.addVenta($scope.venta).then(function(data){
 				alert("La venta ha sido guardada");
 				$location.path('/ventasList');
-				$window.location.reload();
+//				$window.location.reload();
 			});
 		}
 	}
