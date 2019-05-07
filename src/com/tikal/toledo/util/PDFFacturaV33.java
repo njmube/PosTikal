@@ -20,6 +20,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.ExtendedColor;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -35,6 +36,7 @@ import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto.Impuestos.Trasla
 import com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Retenciones;
 import com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Retenciones.Retencion;
 import com.tikal.cacao.util.CustomColor;
+import com.tikal.cacao.util.Util;
 import com.tikal.cacao.util.PDFFactura.MyFooter;
 
 import mx.gob.sat.timbrefiscaldigital.TimbreFiscalDigital;
@@ -131,7 +133,7 @@ public class PDFFacturaV33 {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public Document construirPdf(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Imagen imagen, Estatus estatus, String comentarios) throws MalformedURLException, DocumentException, IOException {
+	public Document construirPdf(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Imagen imagen, Estatus estatus, String comentarios, String proveedor) throws MalformedURLException, DocumentException, IOException {
 		List<Object> complementoTFD = comprobante.getComplemento().get(0).getAny();
 		TimbreFiscalDigital tfd = null;
 		if (complementoTFD.size() > 0) {
@@ -143,7 +145,7 @@ public class PDFFacturaV33 {
 		}
 		
 		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios);
-		this.construirTimbre(selloDigital, bytesQRCode, tfd);
+		this.construirTimbre(selloDigital, bytesQRCode, tfd, proveedor);
 //		this.construirHechoPor();
 		return document;
 	}
@@ -169,7 +171,7 @@ public class PDFFacturaV33 {
 	
 	
 	public Document construirPdfCancelado(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Imagen imagen,
-			Estatus estatus, String selloCancelacion, Date fechaCancelacion, String comentarios) throws DocumentException, MalformedURLException, IOException {
+			Estatus estatus, String selloCancelacion, Date fechaCancelacion, String comentarios, String proveedor) throws DocumentException, MalformedURLException, IOException {
 		
 		List<Object> complementoTFD = comprobante.getComplemento().get(0).getAny();
 		TimbreFiscalDigital tfd = null;
@@ -182,7 +184,7 @@ public class PDFFacturaV33 {
 		}
 		
 		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios);
-		this.construirTimbre(selloDigital, bytesQRCode, tfd);
+		this.construirTimbre(selloDigital, bytesQRCode, tfd, proveedor);
 //		this.construirHechoPor();
 		return document;
 	}
@@ -200,7 +202,7 @@ public class PDFFacturaV33 {
 	}
 	
 	
-	private void construirTimbre(String selloDigital, byte[] bytesQRCode, TimbreFiscalDigital tfd) throws DocumentException, MalformedURLException, IOException {
+	private void construirTimbre(String selloDigital, byte[] bytesQRCode, TimbreFiscalDigital tfd, String proveedor) throws DocumentException, MalformedURLException, IOException {
 		// QRCode Y SELLOS DIGITALES
 		PdfPTable mainTable = new PdfPTable(2);
 		mainTable.setWidthPercentage(100); //antes 100.0f
@@ -218,7 +220,34 @@ public class PDFFacturaV33 {
 		primeraCeldaTabla.setBorder(PdfPCell.NO_BORDER);
 
 		PdfPTable tablaQRCode = new PdfPTable(1);
-		Image imgQRCode = Image.getInstance(bytesQRCode);
+	//	Image imgQRCode = Image.getInstance(bytesQRCode);
+		Image imgQRCode=null;
+		boolean finkok=false;
+		if(proveedor!= null) {
+			if(proveedor.compareTo("finkok")==0) {
+				finkok=true;
+				try{
+					imgQRCode = Image.getInstance(new URL(new String(Util.generate(new String(bytesQRCode)))));
+				}catch(IOException e){
+					BarcodeQRCode barcodeQRCode = new BarcodeQRCode(new String(bytesQRCode), 3000, 3000, null);
+					imgQRCode= barcodeQRCode.getImage();
+				}
+			}
+		}
+		if(!finkok) {
+			try{
+				imgQRCode = Image.getInstance(bytesQRCode);
+			}catch(IOException e){
+				BarcodeQRCode barcodeQRCode = new BarcodeQRCode(new String(bytesQRCode), 3000, 3000, null);
+				imgQRCode= barcodeQRCode.getImage();
+			}
+		}
+		
+		
+//		 imgQRCode.setAlignment(Image.MIDDLE);
+//		 int dpi = imgQRCode.getDpiX();
+//		 imgQRCode.scalePercent(100 * 72 / dpi - 20);
+		imgQRCode.scalePercent(150f);
 		//imgQRCode.setAlignment(Image.MIDDLE);
 		// int dpi = imgQRCode.getDpiX();
 		// imgQRCode.scalePercent(100 * 72 / dpi - 20);
@@ -386,12 +415,27 @@ public class PDFFacturaV33 {
 		PdfPTable subTablaLogo = new PdfPTable(1);
 		PdfPCell celdaLogo = new PdfPCell();
 		celdaLogo.setBorder(PdfPCell.NO_BORDER);
-		
-
-//		Image imgLogo = Image.getInstance("images/pape_logo.jpg");
-//		 Chunk chunkLogo = new Chunk(imgLogo, 0, -35);
-//		 celdaLogo.addElement(chunkLogo);
-		
+		Image imgLogo;
+		imgLogo = Image.getInstance("images/okue.jpg");
+		if (imagen != null ) {
+//			imgLogo = Image.getInstance(new URL(imagen.getImage()));
+//			imgLogo.setScaleToFitHeight(false);
+//			imgLogo.scaleToFit(125F, 37.25F);
+			System.out.println("estatatatat");
+			if(comprobante.getEmisor().getRfc().equals("OIN980511H242")){ 
+				System.out.println("e2222");
+				imgLogo = Image.getInstance("images/okue.jpeg");
+			}
+			imgLogo.setScaleToFitHeight(false);
+			imgLogo.scaleToFit(125F, 37.25F);
+		}else {
+			System.out.println("3333");
+			imgLogo = Image.getInstance("images/okue.jpg");
+			imgLogo.setScaleToFitHeight(false);
+			imgLogo.scaleToFit(125F, 37.25F);
+		}
+		Chunk chunkLogo = new Chunk(imgLogo, 0, -25);
+		celdaLogo.addElement(chunkLogo);
 		subTablaLogo.addCell(celdaLogo);
 		PdfPCell celdaTablaLogo = new PdfPCell();
 		celdaTablaLogo.addElement(subTablaLogo);

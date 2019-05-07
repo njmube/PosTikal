@@ -51,6 +51,8 @@ public class FacturaVTT {
 	private String comentarios;
 	
 	private Estatus estatus;
+	
+	private String proveedor;
 
 	public FacturaVTT() { }
 	
@@ -209,6 +211,14 @@ public class FacturaVTT {
 		this.selloCancelacion = selloCancelacion;
 	}
 	
+	public String getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(String proveedor) {
+		this.proveedor = proveedor;
+	}
+
 	public String getComentarios() {
 		return comentarios;
 	}

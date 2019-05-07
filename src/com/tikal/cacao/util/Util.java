@@ -3,11 +3,15 @@
  */
 package com.tikal.cacao.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -33,6 +37,8 @@ import java.util.GregorianCalendar;
 
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.gson.annotations.SerializedName;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Image;
 import com.tikal.cacao.factura.FormatoFecha;
 import com.tikal.cacao.sat.cfd.Comprobante;
 import com.tikal.cacao.sat.cfd.TUbicacion;
@@ -567,5 +573,38 @@ public class Util {
 	    } catch (NoSuchFieldException ignored) {
 	        return null;
 	    }
+	}
+	public static byte[] generate(String code) {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			String aux= code.replace(":", "%3A");
+			aux=aux.replace("/", "%2F");
+			aux= aux.replace("?", "%3F");
+			aux= aux.replace("&", "%26");
+			aux= aux.replace("=", "%3D");
+			String url= "https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl="+aux+"%2F&choe=UTF-8";
+			Image imgLogo;
+	//		if (imagen != null) {
+			
+			imgLogo = Image.getInstance(new URL(url));
+//			imgLogo.setScaleToFitHeight(false);
+//			imgLogo.scaleToFit(125F, 37.25F);
+			
+			byte[] bytes= imgLogo.getRawData();
+			bytes= url.getBytes();
+//			BarcodeQRCode barcodeQRCode = new BarcodeQRCode(url, 1000, 1000, null);
+//			Image codeQrImage = barcodeQRCode.getImage();
+//			return codeQrImage.getRawData();
+			return bytes;
+			} catch (BadElementException e) {
+				e.printStackTrace();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+//		} // else {
+		return null;
 	}
 }

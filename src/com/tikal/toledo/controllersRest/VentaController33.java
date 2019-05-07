@@ -179,6 +179,7 @@ public class VentaController33 {
 		if(Util.verificarPermiso(re, usuariodao, perfildao, 1,3)){
 		AsignadorDeCharset.asignar(re, res);
 		res.setContentType("Application/PDF");
+		System.out.println("kjjhkjhkhkhkhkhkhkhkh");
 		Venta venta= ventadao.cargar(id);
 		Cliente c= null;
 		if(venta.getIdCliente()!=0){

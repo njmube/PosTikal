@@ -496,7 +496,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 			pdfFactura.getDocument().open();
 			if (factura.getEstatus().equals(Estatus.TIMBRADO))
 				pdfFactura.construirPdf(cfdi, factura.getSelloDigital(), factura.getCodigoQR(), imagen,
-						factura.getEstatus(), factura.getComentarios());
+						factura.getEstatus(), factura.getComentarios(), factura.getProveedor());
 			else if (factura.getEstatus().equals(Estatus.GENERADO)) {
 				pdfFactura.construirPdf(cfdi, imagen, factura.getEstatus(), factura.getComentarios());
 
@@ -514,7 +514,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 			else if (factura.getEstatus().equals(Estatus.CANCELADO)) {
 				pdfFactura.construirPdfCancelado(cfdi, factura.getSelloDigital(), factura.getCodigoQR(), imagen,
 						factura.getEstatus(), factura.getSelloCancelacion(), factura.getFechaCancelacion(),
-						factura.getComentarios());
+						factura.getComentarios(), factura.getProveedor());
 
 				pdfFactura.crearMarcaDeAgua("CANCELADO", writer);
 			}

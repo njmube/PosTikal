@@ -385,6 +385,7 @@ public class VentaController {
 	
 	@RequestMapping(value = {"/descargaNota/{id}" }, method = RequestMethod.GET)
 	public void pdfNota(HttpServletRequest re, HttpServletResponse res, @PathVariable Long id) throws IOException{
+		
 		if(Util.verificarPermiso(re, usuariodao, perfildao, 1,3)){
 		AsignadorDeCharset.asignar(re, res);
 		res.setContentType("Application/PDF");
@@ -395,6 +396,8 @@ public class VentaController {
 		}
 		Comprobante cfdi=cvFactory.generarNota(venta, c,emisordao.getActivo());
 		cfdi.setFolio("Folio: "+venta.getFolio());
+		
+		
 		try {
 //			TimbreFiscalDigital timbre= (TimbreFiscalDigital)cfdi.getComplemento().getAny().get(0);
 //			String uuid= timbre.getUUID();
