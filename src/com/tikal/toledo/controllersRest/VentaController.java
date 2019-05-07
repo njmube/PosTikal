@@ -1,5 +1,6 @@
 package com.tikal.toledo.controllersRest;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -57,6 +58,7 @@ import com.tikal.toledo.security.UsuarioDAO;
 import com.tikal.toledo.util.AsignadorDeCharset;
 import com.tikal.toledo.util.CorteDeCaja;
 import com.tikal.toledo.util.EmailSender;
+import com.tikal.toledo.util.GeneraTicket;
 import com.tikal.toledo.util.JsonConvertidor;
 import com.tikal.toledo.util.PDFFac;
 import com.tikal.toledo.util.PDFFactura;
@@ -433,6 +435,44 @@ public class VentaController {
 			res.sendError(403);
 		}
 	}
+
+	
+	  @RequestMapping(value = { "/generaTicket/{idVenta}" },  method = RequestMethod.GET, produces = "application/pdf")
+			public void generaVale(HttpServletResponse response, HttpServletRequest request, @PathVariable Long idVenta) throws IOException {
+		   
+//		   if(SesionController.verificarPermiso2(request, usuarioDao, perfilDAO, 20, sessionDao,userName)){
+			   response.setContentType("Application/Pdf");
+			   
+			   Venta v = ventadao.cargar(idVenta);
+			   System.out.println("genera ticket con precio"+v.getMonto());
+			 // Envio e = envioDao.consult(idEnvio) ; 
+			   List<Detalle> dets= new ArrayList<Detalle>();
+			  
+					   
+		        File newPdfFile = new File(idVenta+".pdf");		 
+		        if (!newPdfFile.exists()){
+		            try {
+		            	newPdfFile.createNewFile();
+		            } catch (IOException ioe) {
+		                System.out.println("(Error al crear el fichero nuevo ......)" + ioe);
+		            }
+		        }
+		        
+	     
+//		        //Sucursal s= sucursalDao.consult(usuarioDao.consultarUsuario(userName).getIdSucursal());
+//		        Sucursal s= sucursalDao.consult(v.getIdSucursal());
+//		        System.out.println("Empiezo a generar pdf..envios.."+objE );
+//		        System.out.println("Empiezo a generar pdf...suc."+s );
+		        System.out.println("Empiezo a generar pdf...venta."+v );
+		    	GeneraTicket gt = new GeneraTicket(dets,v ,  response.getOutputStream());
+		 
+		    	  response.getOutputStream().flush();
+			        response.getOutputStream().close();
+		    	
+//		   }else{
+//				response.sendError(403);
+//			}
+		}
 
 	
 	@RequestMapping(value = {"/sendmail" }, method = RequestMethod.POST,consumes= "application/json")

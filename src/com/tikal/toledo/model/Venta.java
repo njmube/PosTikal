@@ -42,6 +42,10 @@ public class Venta {
 	
 	private String metodoDePago;
 	
+	private String direccion;
+	
+	private String condiciones;
+	
 	public float getMonto() {
 		return monto;
 	}
@@ -174,5 +178,22 @@ public class Venta {
 	public void setMetodoDePago(String metodoDePago) {
 		this.metodoDePago = metodoDePago;
 	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public String getCondiciones() {
+		return condiciones;
+	}
+
+	public void setCondiciones(String condiciones) {
+		condiciones = condiciones;
+	}
+	
 	
 }
