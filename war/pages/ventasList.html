@@ -58,12 +58,14 @@
 									<td>{{venta.monto}}</td>
 									<td>{{venta.formaDePago}}</td>
 									<td>{{venta.estatus}}</td>
-									<td ng-hide="venta.version=='3.3'"><a class="btn btn-info"
+									<td ng-hide="venta.version=='3.3'">
+									<a class="btn btn-info"
 										data-toggle="tooltip" ng-show="venta.estatus!='FACTURADO'"
 										title="Imprimir nota" href="ventas/descargaNota/{{venta.id}}"
 										download="{{venta.folio+'.pdf'}}"> <i
 											class="glyphicon glyphicon-print"></i>
 									</a>
+									
 										<button class="btn btn-success" data-toggle="tooltip"
 											ng-show="venta.estatus!='FACTURADO' && venta.estatus!='CANCELADO'"
 											title="Facturar" ng-click="facturar(venta)">
@@ -93,6 +95,12 @@
 									<td ng-show="venta.version=='3.3'"><a class="btn btn-info"
 										data-toggle="tooltip" ng-show="venta.estatus!='FACTURADO'"
 										title="Imprimir nota" href="ventas/descargaNota/{{venta.id}}"
+										download="{{venta.folio+'.pdf'}}"> <i
+											class="glyphicon glyphicon-print"></i>
+									</a>
+									<a class="btn btn-warning"
+										data-toggle="tooltip"
+										title="Imprimir Ticket" href="ventas/generaTicket/{{venta.id}}"
 										download="{{venta.folio+'.pdf'}}"> <i
 											class="glyphicon glyphicon-print"></i>
 									</a>
