@@ -968,7 +968,7 @@ public class PDFFactura {
 		PdfPCell celdaLogo = new PdfPCell();
 		celdaLogo.setBorder(PdfPCell.NO_BORDER);
 		
-		Image imgLogo = Image.getInstance("WEB-INF/Images/Construrama.jpeg");
+		Image imgLogo = Image.getInstance("WEB-INF/Images/sanLucas.jpg");
 		 Chunk chunkLogo = new Chunk(imgLogo, 0, -35);
 		 celdaLogo.addElement(chunkLogo);
 

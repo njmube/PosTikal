@@ -62,6 +62,6 @@ public class ImagenController {
 	
 	@RequestMapping(value = "/construrama", method = RequestMethod.GET, produces = "application/json")
 	public void crear(HttpServletResponse resp, HttpServletRequest req) {
-		imagenDAO.addImagen("AAA010101AAA", "/images/AutosolverLogo.jpg");
+		imagenDAO.addImagen("AAA010101AAA", "/images/sanLucas.jpg");
 	}
 }

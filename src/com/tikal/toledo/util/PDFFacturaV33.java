@@ -64,6 +64,7 @@ public class PDFFacturaV33 {
 	private Font fontHeadConceptos = new Font(Font.FontFamily.HELVETICA, 7.5F, Font.NORMAL);
 	private Font fontConceptos = new Font(Font.FontFamily.HELVETICA, 7.5F, Font.NORMAL);
 	private BaseColor tikalColor;
+	private BaseColor tikalColor2;
 	//fontHead.setColor(BaseColor.WHITE);
 
 	private PdfPCell emptyCell = new PdfPCell();
@@ -81,8 +82,8 @@ public class PDFFacturaV33 {
 		fontHeadConceptos.setColor(BaseColor.WHITE);
 		emptyCell.setBorderWidth(1);
 		emptyCell.setBorderColor(BaseColor.GRAY);
-//		tikalColor = new CustomColor(ExtendedColor.TYPE_RGB, 142F / 255F, 0F / 255F, 32F / 255F);
-		tikalColor = BaseColor.GRAY;
+		tikalColor = new CustomColor(ExtendedColor.TYPE_RGB, 143F / 255F, 135F / 255F, 56F / 255F);
+	//	tikalColor = BaseColor.GRAY;
 		celdaEspacio.setBorder(PdfPCell.NO_BORDER);
 		//celdaEspacio.addElement(Chunk.NEWLINE);
 		
@@ -416,7 +417,7 @@ public class PDFFacturaV33 {
 		PdfPCell celdaLogo = new PdfPCell();
 		celdaLogo.setBorder(PdfPCell.NO_BORDER);
 		Image imgLogo;
-		imgLogo = Image.getInstance("images/okue.jpg");
+		imgLogo = Image.getInstance("images/sanLucas.jpg");
 		if (imagen != null ) {
 //			imgLogo = Image.getInstance(new URL(imagen.getImage()));
 //			imgLogo.setScaleToFitHeight(false);
@@ -424,15 +425,15 @@ public class PDFFacturaV33 {
 			System.out.println("estatatatat");
 			if(comprobante.getEmisor().getRfc().equals("OIN980511H242")){ 
 				System.out.println("e2222");
-				imgLogo = Image.getInstance("images/okue.jpeg");
+				imgLogo = Image.getInstance("images/sanLucas.jpg");
 			}
 			imgLogo.setScaleToFitHeight(false);
-			imgLogo.scaleToFit(125F, 37.25F);
+		//	imgLogo.scaleToFit(125F, 37.25F);
 		}else {
 			System.out.println("3333");
-			imgLogo = Image.getInstance("images/okue.jpg");
+			imgLogo = Image.getInstance("images/sanLucas.jpg");
 			imgLogo.setScaleToFitHeight(false);
-			imgLogo.scaleToFit(125F, 37.25F);
+			//imgLogo.scaleToFit(125F, 37.25F);
 		}
 		Chunk chunkLogo = new Chunk(imgLogo, 0, -25);
 		celdaLogo.addElement(chunkLogo);
