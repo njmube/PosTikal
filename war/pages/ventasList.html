@@ -43,6 +43,7 @@
 							<thead>
 								<tr>
 									<th>Fecha</th>
+									<th>Folio</th>
 									<th>Cliente</th>
 									<th>Monto</th>
 									<th>Forma de Pago</th>
@@ -54,6 +55,7 @@
 							<tbody>
 								<tr ng-repeat="venta in ventas" class="odd gradeX">
 									<td>{{venta.fechaString}}</td>
+									<td>{{venta.folio}}</td>
 									<td>{{venta.cliente}}</td>
 									<td>{{venta.monto}}</td>
 									<td>{{venta.formaDePago}}</td>
