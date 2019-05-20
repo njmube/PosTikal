@@ -203,13 +203,14 @@ app.controller("ventaController",['$window','clientesService','ventasService','t
 			}
 		}else{
 		for(i in $scope.venta.detalles){	
-			op = (($scope.venta.detalles[i]._precioUnitario * 1) * comision) / 100;
+			op = (($scope.venta.detalles[i]._precioUnitario * 1) * comision);
 			$scope.venta.detalles[i].precioUnitario = ($scope.venta.detalles[i]._precioUnitario * 1) + op;
 			$scope.venta.detalles[i].precioUnitario = Math.round($scope.venta.detalles[i].precioUnitario * 100) / 100
 			$scope.venta.detalles[i].importe = ($scope.venta.detalles[i].cantidad * 1) * ($scope.venta.detalles[i].precioUnitario * 1)
 			$scope.venta.detalles[i].importe = Math.round($scope.venta.detalles[i].importe * 100) / 100
 		}
 		}
+		$scope.venta.total=0;
 		for(var i=0; i<$scope.venta.detalles.length; i++){
 			$scope.venta.total+=	parseFloat($scope.venta.detalles[i].importe);
 			$scope.venta.total=parseFloat($scope.venta.total.toFixed(2));
@@ -351,10 +352,10 @@ app.controller("ventaController",['$window','clientesService','ventasService','t
 		$scope.venta.detalles.push(detalle);
 		$scope.venta.total=0;
 		$scope.setComision();
-		for(var i=0; i<$scope.venta.detalles.length; i++){
-			$scope.venta.total+=	parseFloat($scope.venta.detalles[i].importe);
-			$scope.venta.total=parseFloat($scope.venta.total.toFixed(2));
-		}
+//		for(var i=0; i<$scope.venta.detalles.length; i++){
+//			$scope.venta.total+=	parseFloat($scope.venta.detalles[i].importe);
+//			$scope.venta.total=parseFloat($scope.venta.total.toFixed(2));
+//		}
 			}else{
 				alert("Indique la cantida");
 			}
