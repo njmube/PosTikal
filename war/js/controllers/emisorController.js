@@ -74,7 +74,7 @@ app.controller("emisoresListController",['$window','emisorService','$scope','$lo
 			emisorService.activar(id).then(function(data){
 				alert("Activado");
 				$location.path("/datosFacturacion");
-				$window.location.reload();
+//				$window.location.reload();
 			})
 		}
 	}
@@ -89,7 +89,7 @@ app.controller("emisorEditController",['$window','emisorService','$scope','$loca
 		emisorService.registrar($scope.emisor).then(function(data){
 			alert("Registrado");
 			$location.path("/datosFacturacion");
-			$window.location.reload();
+//			$window.location.reload();
 		})
 	}
 	
@@ -101,7 +101,7 @@ app.controller("emisorController",['$window','emisorService','$scope','$location
 		emisorService.registrar($scope.emisor).then(function(data){
 			alert("Registrado");
 			$location.path("/datosFacturacion");
-			$window.location.reload();
+//			$window.location.reload();
 		})
 	}
 

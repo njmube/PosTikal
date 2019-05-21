@@ -100,7 +100,7 @@ app.controller("lotesController", [
 				console.log(newLote);
 				lotesService.registraLote(newLote).then(function(newLote) {
 					alert("Lote Agregado");
-					$window.location.reload();
+//					$window.location.reload();
 					$location.path("/inventario");
 				})
 			}

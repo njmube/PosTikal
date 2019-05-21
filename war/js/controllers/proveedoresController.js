@@ -48,7 +48,7 @@ app.controller("proveedoresController",[
 		console.log(newProveedor);		
 		proveedoresService.registraProveedor(newProveedor).then(function(newProveedor) {
 					alert("Proveedor Agregado");
-					$window.location.reload();
+//					$window.location.reload();
 					$location.path("/proveedores");
 				})
 	}
@@ -81,7 +81,7 @@ app.controller("proveedoresEditController",[
 		console.log(newProveedor);		
 		proveedoresService.registraProveedor(newProveedor).then(function(newProveedor) {
 					alert("Proveedor Modificado");
-					$window.location.reload();
+//					$window.location.reload();
 					$location.path("/proveedores");
 				})
 	}

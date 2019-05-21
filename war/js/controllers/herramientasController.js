@@ -133,7 +133,7 @@ app.controller("herramientasController",[
 		console.log(newHerramienta);		
 		herramientasService.registraHerramienta(newHerramienta).then(function(newHerramienta) {
 					alert("Articulo Agregado");
-					$window.location.reload();
+//					$window.location.reload();
 					$location.path("/herramientas");
 				})
 	}
@@ -213,7 +213,7 @@ app.controller("herramientasEditController",[
 			console.log(newHerramienta);		
 			herramientasService.registraHerramienta(newHerramienta).then(function(newHerramineta) {
 						alert("Articulo Modificada");
-						$window.location.reload();
+//						$window.location.reload();
 						$location.path("/herramientas");
 					})
 		}

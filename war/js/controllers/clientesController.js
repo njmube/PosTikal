@@ -96,7 +96,7 @@ app.controller("clientesController",[
 		console.log(newCliente);		
 		clientesService.registraCliente(newCliente).then(function(newCliente) {
 					alert("Cliente Agregado");
-					$window.location.reload();
+//					$window.location.reload();
 					$location.path("/clientes");
 				})
 	}
@@ -143,7 +143,7 @@ app.controller("clientesEditController",[
 		console.log(newCliente);		
 		clientesService.registraCliente(newCliente).then(function(newCliente) {
 					alert("Cliente Modificado");
-					$window.location.reload();
+//					$window.location.reload();
 					$location.path("/clientes");
 				})
 	}	
