@@ -204,7 +204,7 @@ app.controller("ventaController",['$window','clientesService','ventasService','t
 		}else{
 		for(i in $scope.venta.detalles){	
 			op = (($scope.venta.detalles[i]._precioUnitario * 1) * comision);
-			$scope.venta.detalles[i].precioUnitario = ($scope.venta.detalles[i]._precioUnitario * 1) + op;
+			$scope.venta.detalles[i].precioUnitario =  op;
 			$scope.venta.detalles[i].precioUnitario = Math.round($scope.venta.detalles[i].precioUnitario * 100) / 100
 			$scope.venta.detalles[i].importe = ($scope.venta.detalles[i].cantidad * 1) * ($scope.venta.detalles[i].precioUnitario * 1)
 			$scope.venta.detalles[i].importe = Math.round($scope.venta.detalles[i].importe * 100) / 100
