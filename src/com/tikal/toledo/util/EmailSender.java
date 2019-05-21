@@ -76,10 +76,10 @@ public class EmailSender {
 				if (factura.getEstatus().equals(Estatus.CANCELADO)) {
 					pdfFactura.getPieDePagina().setFechaCancel(factura.getFechaCancelacion());
 					pdfFactura.getPieDePagina().setSelloCancel(factura.getSelloCancelacion());
-					pdfFactura.construirPdfCancelado(cfdi, factura.getSelloDigital(), factura.getCodigoQR(),factura.getSelloCancelacion(),factura.getFechaCancelacion(),null);
+					pdfFactura.construirPdfCancelado(cfdi, factura.getSelloDigital(), factura.getCodigoQR(),factura.getSelloCancelacion(),factura.getFechaCancelacion(),null,null,null);
 					pdfFactura.crearMarcaDeAgua("CANCELADO", writer);
 				}else{
-					pdfFactura.construirPdf(cfdi, factura.getSelloDigital(), factura.getCodigoQR(), Estatus.TIMBRADO,1,null);
+					pdfFactura.construirPdf(cfdi, factura.getSelloDigital(), factura.getCodigoQR(), Estatus.TIMBRADO,1,null, null, null);
 				}
 			pdfFactura.getDocument().close();
 			byte[] datap= os.toByteArray();

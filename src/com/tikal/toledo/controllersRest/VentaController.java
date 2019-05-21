@@ -418,7 +418,7 @@ public class VentaController {
 			imagendao.addImagen("AAA010101AAA","images/AutosolverLogo.jpg");
 			Imagen imagen = imagendao.get("AAA010101AAA");
 			//Imagen imagen1=
-				pdfFactura.construirPdf(cfdi, "", null, com.tikal.toledo.factura.Estatus.valueOf(venta.getEstatus()), 0, imagen);
+				pdfFactura.construirPdf(cfdi, "", null, com.tikal.toledo.factura.Estatus.valueOf(venta.getEstatus()), 0, imagen, venta.getDireccion(), venta.getCondiciones());
 				//pdfFactura.construirPdf(cfdi, "", null, com.tikal.toledo.factura.Estatus.valueOf(venta.getEstatus()), 0, imagendao.get("AAA010101AAA"));
 //			}
 				 System.out.println("terminaaaaaaaaaa");

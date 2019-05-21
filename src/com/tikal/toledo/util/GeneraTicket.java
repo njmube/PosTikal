@@ -90,7 +90,7 @@ public class GeneraTicket {
     	    
     	    Font f3 = new Font();
     	    f3.setStyle(1);
-    	    f3.setSize(7);
+    	    f3.setSize(6.5F);
     	    f3.setColor(BaseColor.BLACK);
     	    f3.setStyle(Font.BOLD);
     	   
@@ -101,18 +101,7 @@ public class GeneraTicket {
         	    
             PdfPTable table = new PdfPTable(6);   
             
-            
-            Image imagen = Image.getInstance("WEB-INF/Images/sanLucas.jpg");
-            imagen.scaleAbsolute(150, 70);
            
-      
-            PdfPCell c1 = new PdfPCell(imagen);
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            c1.setVerticalAlignment(Element.ALIGN_CENTER);
-            c1.setColspan(6);
-            c1.setRowspan(5);
-            c1.setBorder(Rectangle.NO_BORDER);
-            table.addCell(c1);
             
             Paragraph h1= new Paragraph(" ",f1);
 	          PdfPCell v1= new PdfPCell(h1);
@@ -120,11 +109,50 @@ public class GeneraTicket {
 	          v1.setColspan(6);v1.setRowspan(1);
 	          v1.setBorder(Rectangle.NO_BORDER);
 	          table.addCell(v1);
+            
+            Image imagen = Image.getInstance("WEB-INF/Images/sanLucas.jpg");
+            imagen.scaleAbsolute(80, 40);
            
-            Paragraph p2 = new Paragraph("AV. SOLIDARIDAD LAS TORRES  # 800 \n SAN JERONIMO CHICAHUALCO, METEPEC",f1);
+      
+            PdfPCell c1 = new PdfPCell(imagen);
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            c1.setVerticalAlignment(Element.ALIGN_CENTER);
+            c1.setColspan(3);
+            c1.setRowspan(5);
+            c1.setBorder(Rectangle.NO_BORDER);
+            table.addCell(c1);
+            
+            
+            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+			String fec= formatter.format(v.getFecha()).substring(0, 16);
+            Paragraph p7 = new Paragraph(fec, f1);
+         //   Paragraph p7 = new Paragraph(v.getFecha().toString().substring(0, 20), f1);
+            PdfPCell c7 = new PdfPCell(p7);
+            c7.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            c7.setColspan(3);c7.setBorder(Rectangle.NO_BORDER);
+            table.addCell(c7);
+    
+		    Paragraph p6 = new Paragraph("FOLIO:"+v.getFolio(),f1);
+		    PdfPCell c6 = new PdfPCell(p6);
+		    c6.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		    c6.setColspan(3);  c1.setRowspan(2);
+		    c6.setBorder(Rectangle.NO_BORDER);
+		    table.addCell(c6);
+		   
+		    Paragraph p4 = new Paragraph("TEL:(722)2710404",f1);
+            PdfPCell c4 = new PdfPCell(p4);
+            c4.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            c4.setColspan(3);c4.setRowspan(1);
+            c4.setBorder(Rectangle.NO_BORDER);
+            table.addCell(c4);
+		    
+	          table.addCell(v1);
+	          table.addCell(v1);
+           
+            Paragraph p2 = new Paragraph("AV. SOLIDARIDAD LAS TORRES  # 800 \n SAN JERONIMO, METEPEC, MÉXICO, 52170",f1);
             PdfPCell c2 = new PdfPCell(p2);
             c2.setHorizontalAlignment(Element.ALIGN_CENTER);
-            c2.setColspan(6);c2.setRowspan(2);
+            c2.setColspan(6);c2.setRowspan(1);
             c2.setBorder(Rectangle.NO_BORDER);
             table.addCell(c2);
             
@@ -142,12 +170,7 @@ public class GeneraTicket {
 //            c5.setBorder(Rectangle.NO_BORDER);
 //            table.addCell(c5);
             
-            Paragraph p4 = new Paragraph("Tel: (722) 271 0404",f1);
-            PdfPCell c4 = new PdfPCell(p4);
-            c4.setHorizontalAlignment(Element.ALIGN_LEFT);
-            c4.setColspan(3);c4.setRowspan(1);
-            c4.setBorder(Rectangle.NO_BORDER);
-            table.addCell(c4);
+           
                        
 //            Paragraph x = new Paragraph(" ",f1);
 //            PdfPCell x1 = new PdfPCell(x);
@@ -156,27 +179,15 @@ public class GeneraTicket {
 //            x1.setBorder(Rectangle.NO_BORDER);
 //            table.addCell(x1);
 
-            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-        			String fec= formatter.format(v.getFecha()).substring(0, 16);
-                    Paragraph p7 = new Paragraph(fec, f1);
-                 //   Paragraph p7 = new Paragraph(v.getFecha().toString().substring(0, 20), f1);
-                    PdfPCell c7 = new PdfPCell(p7);
-                    c7.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                    c7.setColspan(3);c7.setBorder(Rectangle.NO_BORDER);
-                    table.addCell(c7);
             
-            Paragraph p6 = new Paragraph("Folio:"+v.getFolio(),f2);
-            PdfPCell c6 = new PdfPCell(p6);
-            c6.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            c6.setColspan(6);
-            c6.setBorder(Rectangle.NO_BORDER);
-            table.addCell(c6);
+          
             
        //     Paragraph p7 = new Paragraph(v.getFecha().toGMTString().substring(0, 20), f1);
             
         
+            table.addCell(v1);
             
-            Paragraph p8 = new Paragraph("Cliente:",f1);
+            Paragraph p8 = new Paragraph("CLIENTE:",f1);
             PdfPCell c8 = new PdfPCell(p8);
             c8.setHorizontalAlignment(Element.ALIGN_CENTER);
             c8.setColspan(2);
@@ -207,31 +218,31 @@ public class GeneraTicket {
            // document.add(new Paragraph("\n"));
             //document.add(new Paragraph("\n"));
             
-            PdfPTable table2 = new PdfPTable(8);        
+            PdfPTable table2 = new PdfPTable(10);        
             
             
             
-            Paragraph pxx = new Paragraph("Cantidad",f3);
+            Paragraph pxx = new Paragraph("CANT",f3);
             PdfPCell cxx = new PdfPCell(pxx);
             cxx.setHorizontalAlignment(Element.ALIGN_LEFT);
             cxx.setColspan(2);
           //  cxx.setBorder(Rectangle.NO_BORDER);
             table2.addCell(cxx);
             
-            Paragraph p9 = new Paragraph("Descripción",f3);
+            Paragraph p9 = new Paragraph("DESCRIPCIÓN",f3);
             PdfPCell c9 = new PdfPCell(p9);
             //c9.setBackgroundColor(black);
             c9.setHorizontalAlignment(Element.ALIGN_LEFT);
-            c9.setColspan(3);
+            c9.setColspan(6);
             c9.setRowspan(1);
           //  c9.setBackgroundColor(BaseColor.BLACK);
             table2.addCell(c9);
             
-            Paragraph p1 = new Paragraph("Importe",f3);
+            Paragraph p1 = new Paragraph("IMPORTE",f3);
             PdfPCell c11 = new PdfPCell(p1);
             c11.setHorizontalAlignment(Element.ALIGN_CENTER);
             //c11.setBackgroundColor(BaseColor.BLACK);
-            c11.setColspan(3);
+            c11.setColspan(2);
             table2.addCell(c11);
             
             for (Detalle en:v.getDetalles()){
@@ -247,17 +258,17 @@ public class GeneraTicket {
                   PdfPCell c12 = new PdfPCell(p12);
                   c12.setHorizontalAlignment(Element.ALIGN_LEFT);
                 //  c12.setBackgroundColor(BaseColor.BLACK);
-                  c12.setColspan(3);
+                  c12.setColspan(6);
                   table2.addCell(c12);
                   
                       
                       
                       double importeTotal = Math.round(v.getMonto() * 100.0) / 100.0;
-                      Paragraph p13 = new Paragraph("$ "+ importeTotal,f2);//String.valueOf());//e.getPrecio()),f1);
+                      Paragraph p13 = new Paragraph("$ "+ importeTotal,f1);//String.valueOf());//e.getPrecio()),f1);
                       PdfPCell c13 = new PdfPCell(p13);
                       c13.setHorizontalAlignment(Element.ALIGN_LEFT);
                       //c13.setBackgroundColor(BaseColor.BLACK);
-                      c13.setColspan(3);
+                      c13.setColspan(2);
                       table2.addCell(c13);
                       
                       
@@ -277,26 +288,28 @@ public class GeneraTicket {
             cv.setHorizontalAlignment(Element.ALIGN_LEFT);
             //.setBackgroundColor(BaseColor.BLACK);
             cv.setBorder(Rectangle.NO_BORDER);
-            cv.setColspan(4);
+            cv.setColspan(10);
             
-            table2.addCell(cv);table2.addCell(cv);
+            table2.addCell(cv);
             
-            double Te = Math.round(v.getMonto()* 100.0) / 100.0;
-            Paragraph p30 = new Paragraph("Total: $ "+Te,f2);
-            PdfPCell c30= new PdfPCell(p30);
-            c30.setHorizontalAlignment(Element.ALIGN_RIGHT);
-           //.setBackgroundColor(BaseColor.BLACK);
-            c30.setBorder(Rectangle.NO_BORDER);
-            c30.setColspan(8);
-            table2.addCell(c30);
+           
                             
-        	  String importeConLetra = NumberToLetterConverter.convertNumberToLetter(v.getMonto(), "MXN");
+        	 String importeConLetra = NumberToLetterConverter.convertNumberToLetter(v.getMonto(), "MXN");
             Paragraph p32 = new Paragraph(importeConLetra,f3);
             PdfPCell c32 = new PdfPCell(p32);
             c32.setHorizontalAlignment(Element.ALIGN_CENTER);
             // c15.setBackgroundColor(BaseColor.BLACK);
-            c32.setColspan(8);
+            c32.setColspan(6);
             table2.addCell(c32);
+            
+            double Te = Math.round(v.getMonto()* 100.0) / 100.0;
+            Paragraph p30 = new Paragraph("$ "+Te,f2);
+            PdfPCell c30= new PdfPCell(p30);
+            c30.setHorizontalAlignment(Element.ALIGN_RIGHT);
+           //.setBackgroundColor(BaseColor.BLACK);
+           // c30.setBorder(Rectangle.NO_BORDER);
+            c30.setColspan(4);
+            table2.addCell(c30);
             
             Paragraph p33 = new Paragraph(v.getCondiciones(),f4);
             PdfPCell c33 = new PdfPCell(p33);

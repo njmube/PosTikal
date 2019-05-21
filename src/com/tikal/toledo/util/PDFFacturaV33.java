@@ -60,12 +60,12 @@ public class PDFFacturaV33 {
 	
 	//private Font fontWhiteDecimals = new Font(Font.FontFamily.HELVETICA, 8.5F, Font.NORMAL, BaseColor.WHITE);
 	
-	private Font fontHead = new Font(Font.FontFamily.HELVETICA, 8.5F, Font.NORMAL);
+	private Font fontHead = new Font(Font.FontFamily.HELVETICA, 8.0F, Font.NORMAL);
 	private Font fontHeadConceptos = new Font(Font.FontFamily.HELVETICA, 7.5F, Font.NORMAL);
 	private Font fontConceptos = new Font(Font.FontFamily.HELVETICA, 7.5F, Font.NORMAL);
 	private BaseColor tikalColor;
-	private BaseColor tikalColor2;
-	//fontHead.setColor(BaseColor.WHITE);
+
+	
 
 	private PdfPCell emptyCell = new PdfPCell();
 	private PdfPCell celdaEspacio = new PdfPCell();
@@ -78,12 +78,13 @@ public class PDFFacturaV33 {
 	private String descripcionTipoCFDI;
 	
 	public PDFFacturaV33(String descripcionUsoDeCFDI, String descripcionRegimenFiscal, String descripcionFormaDePago, String descripcionTipoCFDI) {
+	//	fontHead.setColor(new BaseColor(17,55,92));
 		fontHead.setColor(BaseColor.WHITE);
 		fontHeadConceptos.setColor(BaseColor.WHITE);
 		emptyCell.setBorderWidth(1);
 		emptyCell.setBorderColor(BaseColor.GRAY);
-		tikalColor = new CustomColor(ExtendedColor.TYPE_RGB, 143F / 255F, 135F / 255F, 56F / 255F);
-	//	tikalColor = BaseColor.GRAY;
+//		tikalColor = new CustomColor(ExtendedColor.TYPE_RGB, 142F / 255F, 0F / 255F, 32F / 255F);
+		tikalColor = BaseColor.GRAY;
 		celdaEspacio.setBorder(PdfPCell.NO_BORDER);
 		//celdaEspacio.addElement(Chunk.NEWLINE);
 		
@@ -428,14 +429,14 @@ public class PDFFacturaV33 {
 				imgLogo = Image.getInstance("images/sanLucas.jpg");
 			}
 			imgLogo.setScaleToFitHeight(false);
-		//	imgLogo.scaleToFit(125F, 37.25F);
+			imgLogo.scaleToFit(200F, 37.25F);
 		}else {
 			System.out.println("3333");
 			imgLogo = Image.getInstance("images/sanLucas.jpg");
 			imgLogo.setScaleToFitHeight(false);
-			//imgLogo.scaleToFit(125F, 37.25F);
+			imgLogo.scaleToFit(200F, 37.25F);
 		}
-		Chunk chunkLogo = new Chunk(imgLogo, 0, -25);
+		Chunk chunkLogo = new Chunk(imgLogo, 0, -35);
 		celdaLogo.addElement(chunkLogo);
 		subTablaLogo.addCell(celdaLogo);
 		PdfPCell celdaTablaLogo = new PdfPCell();
@@ -447,16 +448,22 @@ public class PDFFacturaV33 {
 
 		PdfPCell celdaDatosEmisor = new PdfPCell();
 		Phrase fraseDatosEmisor = new Phrase();
-		Chunk chunkNombreEmisor = new Chunk("", font2);
-		if(comprobante.getEmisor().getNombre()!=null){
-			chunkNombreEmisor = new Chunk(comprobante.getEmisor().getNombre(), font2);
-		}
-		Chunk chunkRFCEmisor = new Chunk("R.F.C. ".concat(comprobante.getEmisor().getRfc()), font3);
-		//Chunk chunkDomicilioEmisor = new Chunk(comprobante.getEmisor().getDomicilioFiscal().toString(), font3);
+		Chunk chunkNombreEmisor = new Chunk("Construrama Casa San Lucas", font2);
+//		if(comprobante.getEmisor().getNombre()!=null){
+//			chunkNombreEmisor = new Chunk("Casa San Lucas", font2);
+//		}
+		Chunk chunkRFCEmisor = new Chunk("R.F.C. : ".concat(comprobante.getEmisor().getRfc()), font3);
+		Chunk chunkT = new Chunk("Tel: (722) 271 0404", font3);
 		fraseDatosEmisor.add(chunkNombreEmisor);
+		Chunk mail= new Chunk("construrama.sanlucas@gmail.com",font3);
+		
 		fraseDatosEmisor.add(Chunk.NEWLINE);
-		fraseDatosEmisor.add(chunkRFCEmisor);
-		fraseDatosEmisor.add(Chunk.NEWLINE);
+			fraseDatosEmisor.add(chunkRFCEmisor);
+			fraseDatosEmisor.add(Chunk.NEWLINE);
+			fraseDatosEmisor.add(chunkT);
+			fraseDatosEmisor.add(Chunk.NEWLINE);
+			fraseDatosEmisor.add(mail);
+		//fraseDatosEmisor.add(Chunk.NEWLINE);
 		//fraseDatosEmisor.add(chunkDomicilioEmisor);
 		celdaDatosEmisor.setBorderWidth(1);
 		celdaDatosEmisor.disableBorderSide(PdfPCell.LEFT);
@@ -559,15 +566,15 @@ public class PDFFacturaV33 {
 		
 		PdfPCell celdaInfoIva = new PdfPCell(new Paragraph("Impuesto trasladado a cada concepto del CFDI", fontHead));
 		celdaInfoIva.setColspan(3);
-		celdaInfoIva.setBackgroundColor(this.tikalColor);
+		celdaInfoIva.setBackgroundColor(BaseColor.GRAY);
 		celdaInfoIva.setPadding(5F);
 		celdaInfoIva.setBorderColor(BaseColor.GRAY);
 		celdaInfoIva.setBorderWidth(1F);
 		tablaIVA.addCell(celdaInfoIva);
 		
-		agregarCeldaConFondo("Impuesto", fontHeadConceptos, tablaIVA, true);
-		agregarCeldaConFondo("Tipo factor", fontHeadConceptos, tablaIVA, true);
-		agregarCeldaConFondo("Tipo tasa", fontHeadConceptos, tablaIVA, true);
+		agregarCeldaConFondo("Impuesto", fontHead, tablaIVA, true);
+		agregarCeldaConFondo("Tipo factor", fontHead, tablaIVA, true);
+		agregarCeldaConFondo("Tipo tasa", fontHead, tablaIVA, true);
 		
 		agregarCelda("002 IVA", fontConceptos, tablaIVA, true);
 		agregarCelda("Tasa", fontConceptos, tablaIVA, true);
@@ -580,23 +587,23 @@ public class PDFFacturaV33 {
 		tablaConceptos.setWidthPercentage(100);
 		tablaConceptos.setWidths(new float[] { 9, 9, 8, 8, 8, 15, 15, 15, 13 });
 
-		agregarCeldaConFondo("Clave ProdServ", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Clave ProdServ", fontHead, tablaConceptos, true);
 		
-		agregarCeldaConFondo("No. Identificación", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("No. Identificación", fontHead, tablaConceptos, true);
 
-		agregarCeldaConFondo("Cantidad", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Cantidad", fontHead, tablaConceptos, true);
 		
-		agregarCeldaConFondo("Clave Unidad", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Clave Unidad", fontHead, tablaConceptos, true);
 
-		agregarCeldaConFondo("Unidad", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Unidad", fontHead, tablaConceptos, true);
 
-		agregarCeldaConFondo("Descripción", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Descripción", fontHead, tablaConceptos, true);
 
-		agregarCeldaConFondo("Valor unitario", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Valor unitario", fontHead, tablaConceptos, true);
 
-		agregarCeldaConFondo("Importe", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Importe", fontHead, tablaConceptos, true);
 		
-		agregarCeldaConFondo("Traslado IVA", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Traslado IVA", fontHead, tablaConceptos, true);
 
 		List<Concepto> listaConceptos = comprobante.getConceptos().getConcepto();
 		for (Concepto concepto : listaConceptos) {
@@ -660,7 +667,7 @@ public class PDFFacturaV33 {
 		celdaImporteConLetra.setPhrase(fraseImporteConLetra);
 		tablaImporteConLetra.addCell(celdaImporteConLetra);
 
-		emptyCell.setBackgroundColor(tikalColor);
+		emptyCell.setBackgroundColor(BaseColor.GRAY);
 		tablaImporteConLetra.addCell(emptyCell);
 		document.add(tablaImporteConLetra);
 	}
@@ -799,10 +806,12 @@ public class PDFFacturaV33 {
 	private void agregarCeldaConFondo(String contenidoCelda, Font fuente, PdfPTable tabla, boolean centrado) {
 		PdfPCell celda = new PdfPCell(new Paragraph(contenidoCelda, fuente));
 		celda.setBorderWidth(1);
-		celda.setBorderColor(BaseColor.GRAY);
+	//	celda.setBorderColor(new BaseColor(246,123,29)); naranja
+		celda.setBorderColor(BaseColor.GRAY);//gris
 		celda.setPadding(5);
-		celda.setBackgroundColor(tikalColor);
-
+	//	tikalColor = new CustomColor(ExtendedColor.TYPE_RGB, 143F / 255F, 135F / 255F, 56F / 255F);
+	//	celda.setBackgroundColor(new BaseColor(246,123,29)); naranja
+		celda.setBackgroundColor(BaseColor.GRAY);  //gris
 		if (centrado) {
 			celda.setHorizontalAlignment(Element.ALIGN_CENTER);
 		}
@@ -812,6 +821,7 @@ public class PDFFacturaV33 {
 	private void agregarCelda(String contenidoCelda, Font fuente, PdfPTable tabla, boolean centrado) {
 		PdfPCell celda = new PdfPCell(new Paragraph(contenidoCelda, fuente));
 		celda.setBorderWidth(1);
+		//celda.setBorderColor(new BaseColor(246,123,29));
 		celda.setBorderColor(BaseColor.GRAY);
 		celda.setPadding(5);
 

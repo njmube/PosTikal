@@ -1,6 +1,9 @@
 package com.tikal.toledo.util;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;				
 import java.text.NumberFormat;
@@ -19,13 +22,15 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.ExtendedColor;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.tikal.cacao.model.Imagen;							
+import com.tikal.cacao.model.Imagen;
+import com.tikal.cacao.util.CustomColor;
 import com.tikal.toledo.factura.Estatus;
 import com.tikal.toledo.model.Venta;
 import com.tikal.toledo.sat.cfd.Comprobante;
@@ -55,14 +60,15 @@ public class PDFFactura {
 	private Font fontSerieYFolio = new Font(Font.FontFamily.HELVETICA, 8.5F, Font.BOLD);
 	private Font fontHead = new Font(Font.FontFamily.HELVETICA, 7.5F, Font.NORMAL);
 	// fontHead.setColor(BaseColor.WHITE);
-
+	private BaseColor tikalColor;
+	private BaseColor tikalColor2;
 	private PdfPCell emptyCell = new PdfPCell();
 	// emptyCell.setBorderWidth(0);
 
 	public PDFFactura() {
-		fontHead.setColor(BaseColor.BLUE);
+		fontHead.setColor(new BaseColor(17,55,92));
 		emptyCell.setBorderWidth(0);
-
+		tikalColor = new CustomColor(ExtendedColor.TYPE_RGB, 143F / 255F, 135F / 255F, 56F / 255F);
 		this.document = new Document();
 		this.document.setPageSize(PageSize.A4);
 		this.document.setPageSize(PageSize.LETTER.rotate());
@@ -94,7 +100,7 @@ public class PDFFactura {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public Document construirPdf(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Estatus estatus, int tipo, Imagen imagen)
+	public Document construirPdf(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Estatus estatus, int tipo, Imagen imagen,String dir, String con)
 			throws DocumentException, MalformedURLException, IOException {
 		TimbreFiscalDigital tfd = null;
 		if(tipo==1){
@@ -110,7 +116,7 @@ public class PDFFactura {
 			}
 		}
 		}
-		construirBoceto(comprobante, tfd,tipo, estatus, imagen);
+		construirBoceto(comprobante, tfd,tipo, estatus, imagen, dir, con);
 
 		// si no hay timbre lanzar una excepción
 		/*
@@ -432,9 +438,9 @@ public class PDFFactura {
 		return document;
 	}
 
-	public Document construirPdf(Comprobante comprobante, Estatus estatus, Imagen imagen) throws DocumentException, MalformedURLException, IOException {
+	public Document construirPdf(Comprobante comprobante, Estatus estatus, Imagen imagen, String dir, String con) throws DocumentException, MalformedURLException, IOException {
 
-		construirBoceto(comprobante, null,0, estatus, imagen);
+		construirBoceto(comprobante, null,0, estatus, imagen, dir, con);
 
 		/*
 		 * Font fontContenidoSellos = new Font(Font.FontFamily.HELVETICA, 7.5F,
@@ -753,7 +759,7 @@ public class PDFFactura {
 	}
 
 	public Document construirPdfCancelado(Comprobante comprobante, String selloDigital, byte[] bytesQRCode,
-			String selloCancelacion, Date fechaCancelacion,Imagen imagen)
+			String selloCancelacion, Date fechaCancelacion,Imagen imagen, String dir, String con)
 			throws MalformedURLException, DocumentException, IOException {
 		// this.document = construirPdf(comprobante, selloDigital, bytesQRCode,
 		// imagen, estatus);
@@ -767,7 +773,7 @@ public class PDFFactura {
 			}
 		}
 
-		construirBoceto(comprobante, tfd,0, Estatus.CANCELADO, imagen);
+		construirBoceto(comprobante, tfd,0, Estatus.CANCELADO, imagen, dir, con);
 		construirTimbre(selloDigital, bytesQRCode, tfd);
 
 		/*
@@ -805,9 +811,9 @@ public class PDFFactura {
 	private void agregarCeldaConFondo(String contenidoCelda, Font fuente, PdfPTable tabla, boolean centrado) {
 		PdfPCell celda = new PdfPCell(new Paragraph(contenidoCelda, fuente));
 		celda.setBorderWidth(1);
-		celda.setBorderColor(new BaseColor(209,227,233));
+		celda.setBorderColor(new BaseColor(246,123,29));
 		celda.setPadding(5);
-		celda.setBackgroundColor(new BaseColor(209,227,233));
+		celda.setBackgroundColor(new BaseColor(246,123,29));
 
 		if (centrado)
 			celda.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -953,13 +959,13 @@ public class PDFFactura {
 		
 	}
 
-	private void construirBoceto(Comprobante comprobante, TimbreFiscalDigital tfd,int encabezado, Estatus estatus, Imagen imagen)
+	private void construirBoceto(Comprobante comprobante, TimbreFiscalDigital tfd,int encabezado, Estatus estatus, Imagen imagen, String dir, String con)
 			throws DocumentException, MalformedURLException, IOException {
 
 		// Encabezado
-		PdfPTable tablaEncabezado = new PdfPTable(2);
+		PdfPTable tablaEncabezado = new PdfPTable(3);
 		tablaEncabezado.setWidthPercentage(100);
-		tablaEncabezado.setWidths(new float[] { 70, 30 });
+		tablaEncabezado.setWidths(new float[] { 35, 35,30 });
 		PdfPCell celdaTablaLogo = new PdfPCell();
 		PdfPCell celdaFechaHora = new PdfPCell();
 		
@@ -978,6 +984,36 @@ public class PDFFactura {
 		celdaTablaLogo.setBorder(PdfPCell.NO_BORDER);
 		tablaEncabezado.addCell(celdaTablaLogo);
 		
+		
+		
+		PdfPTable subTabla22 = new PdfPTable(1);
+		//PdfPCell celda22 = new PdfPCell();
+		//celdaLogo.setBorder(PdfPCell.NO_BORDER);
+		//celda datos y no. de nota del encabezado
+		PdfPCell celdaDatosEmisor = new PdfPCell();
+		celdaDatosEmisor.setBorder(PdfPCell.NO_BORDER);
+		Phrase fraseDatosEmisor = new Phrase();
+		font1.setColor(BaseColor.BLACK);
+		String dom = "";
+		if (comprobante.getEmisor().getDomicilioFiscal() != null) {
+			dom = comprobante.getEmisor().getDomicilioFiscal().toString();
+		}
+
+	////	 agregarChunkYNuevaLinea("", font1, fraseDatosEmisor);
+		 agregarChunkYNuevaLinea("", font1, fraseDatosEmisor);
+		 agregarChunkYNuevaLinea("Construrama Casa San Lucas", font2, fraseDatosEmisor);
+	//	 agregarChunkYNuevaLinea("R.F.C. ".concat(comprobante.getEmisor().getRfc()),font3, fraseDatosEmisor);
+	//	 agregarChunkYNuevaLinea(dom, font3, fraseDatosEmisor);
+		 agregarChunkYNuevaLinea("Tel: (722) 271 0404", font3, fraseDatosEmisor);
+		 agregarChunkYNuevaLinea("construrama.sanlucas@gmail.com", font3, fraseDatosEmisor);
+		
+		 celdaDatosEmisor.setMinimumHeight(45);
+		 celdaDatosEmisor.setPhrase(fraseDatosEmisor);
+		celdaDatosEmisor.setHorizontalAlignment(Element.ALIGN_CENTER);
+		subTabla22.addCell(celdaDatosEmisor);
+		celdaTablaLogo.addElement(subTabla22);
+		tablaEncabezado.addCell(celdaDatosEmisor);
+
 		PdfPTable subTablaFecha = new PdfPTable(1);
 		PdfPCell celdaSubTablaFecha = new PdfPCell();
 		celdaSubTablaFecha.setBorder(PdfPCell.NO_BORDER);
@@ -985,43 +1021,39 @@ public class PDFFactura {
 		if(encabezado==1){
 		 if (estatus.equals(Estatus.TIMBRADO) ||
 		 estatus.equals(Estatus.CANCELADO)){
-		 lugarFechaEmiHoraCert = comprobante.getLugarExpedicion().concat(" a ").concat(comprobante.getFecha().toString().concat(" / ").concat(tfd.getFechaTimbrado().toString()));
+		 lugarFechaEmiHoraCert = ("Metepec, México a ").concat(comprobante.getFecha().toString().concat(" / ").concat(tfd.getFechaTimbrado().toString()));
 		 }else if (estatus.equals(Estatus.GENERADO)|| estatus.equals(Estatus.VENDIDO)){
-		 lugarFechaEmiHoraCert = comprobante.getLugarExpedicion().concat(" a ").concat(comprobante.getFecha().toString());
+		 lugarFechaEmiHoraCert = ("Metepec, México a  ").concat(comprobante.getFecha().toString());
 		 }
 		}else{
-			lugarFechaEmiHoraCert = comprobante.getLugarExpedicion().concat(" a ").concat(comprobante.getFecha().toString());
+			lugarFechaEmiHoraCert = "Metepec, México a ".concat(comprobante.getFecha().toString());
 		}
+		 agregarChunkYNuevaLinea("", font1, fraseDatosEmisor);
 		agregarCeldaSinBorde(lugarFechaEmiHoraCert, font3, subTablaFecha, true);
-		agregarCeldaSinBorde(" ", font1, subTablaFecha, true);
+	//	agregarCeldaSinBorde(" ", font1, subTablaFecha, true);
+		if(estatus.equals(Estatus.CANCELADO)|| estatus.equals(Estatus.TIMBRADO)){
+			agregarCeldaSinBorde("FACTURA", fontSerieYFolio, subTablaFecha, true);
+		}else{
+			if(estatus.equals(Estatus.GENERADO)){
+				agregarCeldaSinBorde("PRESUPUESTO", fontSerieYFolio, subTablaFecha,true);
+			}else{
+				if(estatus.equals(Estatus.DEVOLUCION)){
+					agregarCeldaSinBorde("DEVOLUCION", fontSerieYFolio, subTablaFecha, true);
+				}else{
+					agregarCeldaSinBorde("PEDIDO", fontSerieYFolio, subTablaFecha, true);
+				}
+			}
+			
+		}
+		agregarCeldaSinBorde(getFolioYSerie(comprobante), fontSerieYFolio, subTablaFecha, true);
+		
+		
 		
 		celdaSubTablaFecha.addElement(subTablaFecha);
 		celdaSubTablaFecha.setBorderColor(BaseColor.GRAY);
 		tablaEncabezado.addCell(celdaSubTablaFecha);
 		
 		
-		//celda datos y no. de nota del encabezado
-		PdfPCell celdaDatosEmisor = new PdfPCell();
-		celdaDatosEmisor.setBorder(PdfPCell.NO_BORDER);
-		Phrase fraseDatosEmisor = new Phrase();
-		font1.setColor(BaseColor.BLUE);
-		String dom = "";
-		if (comprobante.getEmisor().getDomicilioFiscal() != null) {
-			dom = comprobante.getEmisor().getDomicilioFiscal().toString();
-		}
-
-	//	 agregarChunkYNuevaLinea("CONSTRURAMA METEPEC", font1, fraseDatosEmisor);
-		 agregarChunkYNuevaLinea(comprobante.getEmisor().getNombre(), font2, fraseDatosEmisor);
-	//	 agregarChunkYNuevaLinea("R.F.C. ".concat(comprobante.getEmisor().getRfc()),font3, fraseDatosEmisor);
-	//	 agregarChunkYNuevaLinea(dom, font3, fraseDatosEmisor);
-	//	 agregarChunkYNuevaLinea("Tel: (722) 271 0404", font3, fraseDatosEmisor);
-		// agregarChunkYNuevaLinea("construramachm@gmail.com", font3, fraseDatosEmisor);
-		
-		 celdaDatosEmisor.setMinimumHeight(45);
-		 celdaDatosEmisor.setPhrase(fraseDatosEmisor);
-		celdaDatosEmisor.setHorizontalAlignment(Element.ALIGN_LEFT);
-		tablaEncabezado.addCell(celdaDatosEmisor);
-
 		PdfPTable subTablaNota = new PdfPTable(1);
 		PdfPCell celdaNota = new PdfPCell();
 		celdaNota.setBorder(PdfPCell.NO_BORDER);
@@ -1034,7 +1066,7 @@ public class PDFFactura {
 				if(estatus.equals(Estatus.DEVOLUCION)){
 					agregarCeldaSinBorde("DEVOLUCION", fontSerieYFolio, subTablaNota, true);
 				}else{
-					agregarCeldaSinBorde("NOTA", fontSerieYFolio, subTablaNota, true);
+					agregarCeldaSinBorde("PEDIDO", fontSerieYFolio, subTablaNota, true);
 				}
 			}
 			
@@ -1052,15 +1084,15 @@ public class PDFFactura {
 		// DIRECCIÓN 
 		PdfPTable tablaDirYOtrosDatosFis = new PdfPTable(2);
 		tablaDirYOtrosDatosFis.setWidthPercentage(100);
-		tablaDirYOtrosDatosFis.setWidths(new float[] { 25, 75 });
+		tablaDirYOtrosDatosFis.setWidths(new float[] { 25,75});
 
-		agregarCeldaConFondo("Dirección", fontHead, tablaDirYOtrosDatosFis, false);
+		agregarCeldaConFondo("CONTACTO", fontHead, tablaDirYOtrosDatosFis, false);
 
-		String domr = "";
-		if (comprobante.getReceptor().getDomicilio() != null) {
-			domr = comprobante.getReceptor().getDomicilio().toString();
-		}
-		agregarCeldaSinBorde(domr, font3, tablaDirYOtrosDatosFis, false);
+//		String domr = "";
+//		if (comprobante.getReceptor().getDomicilio() != null) {
+//			domr = comprobante.getEmisor().getDomicilioFiscal().toString();
+//		}
+		agregarCeldaSinBorde(comprobante.getReceptor().getNombre(), font3, tablaDirYOtrosDatosFis, false);
 		
 		PdfPTable tablaPrincipalDireccion = new PdfPTable(3);
 		crearNotaDoble(tablaPrincipalDireccion,true,48,4,48,tablaDirYOtrosDatosFis);
@@ -1089,8 +1121,20 @@ public class PDFFactura {
 				agregarCelda(concepto.getCantidad().toString(), font3, tablaConceptos, true);
 				agregarCelda(concepto.getUnidad(), font3, tablaConceptos, true);
 				agregarCelda(concepto.getDescripcion(), font3, tablaConceptos, false);
+				//double aux=(concepto.getValorUnitario().doubleValue()*1.16 )*1;
 				agregarCelda(formatter.format(concepto.getValorUnitario().doubleValue()), font3, tablaConceptos, true);
-				agregarCelda(formatter.format(concepto.getImporte().doubleValue()), font3, tablaConceptos, true);
+				double res=(concepto.getCantidad().doubleValue() * concepto.getValorUnitario().doubleValue());
+				//total.setScale(2, RoundingMode.HALF_UP)
+			//	BigDecimal b = new BigDecimal(res*1, MathContext.DECIMAL64);
+//				String n=String.valueOf(res);
+//				System.out.println("n:"+n);
+//				System.out.println("long:"+n.length());
+//				String x=n.substring(0, n.length()-2);
+			
+				//System.out.println("x:"+x);
+				//double a=formatter.format(aux);
+				 BigDecimal bigDecimal = BigDecimal.valueOf(res).setScale(2, RoundingMode.HALF_UP);
+				agregarCelda(formatter.format(bigDecimal), font3, tablaConceptos, true);
 			}
 		}
 		tablaConceptos.setSpacingBefore(4);
@@ -1117,7 +1161,7 @@ public class PDFFactura {
 		celdaImporteConLetra.setPhrase(fraseImporteConLetra);
 		tablaImporteConLetra.addCell(celdaImporteConLetra);
 
-		emptyCell.setBackgroundColor(new BaseColor(209,227,233));
+		emptyCell.setBackgroundColor(new BaseColor(246,123,29));
 		tablaImporteConLetra.addCell(emptyCell);
 		
 		PdfPTable tablaPrincipalImporte = new PdfPTable(3);
@@ -1180,7 +1224,7 @@ public class PDFFactura {
 		tablaLeyendaTotal.addCell(celdaLeyenda);
 
 		PdfPTable subTablaEtqTotal = new PdfPTable(1);
-		agregarCeldaConFondo("Subtotal", fontHead, subTablaEtqTotal, true);
+		agregarCeldaConFondo("", fontHead, subTablaEtqTotal, true);
 		boolean existeIVATraslado = false;
 		double importe = 0.0;
 		if(comprobante.getImpuestos()!=null){
@@ -1191,7 +1235,7 @@ public class PDFFactura {
 			if (traslados.get(0).getImpuesto().equals(IVA)) {
 				existeIVATraslado = true;
 				importe = traslados.get(0).getImporte().doubleValue();
-				agregarCeldaConFondo("IVA 16%", fontHead, subTablaEtqTotal, true);
+				agregarCeldaConFondo("", fontHead, subTablaEtqTotal, true);
 			}
 		} else {
 			subTablaEtqTotal.addCell(emptyCell);
@@ -1203,10 +1247,12 @@ public class PDFFactura {
 		tablaLeyendaTotal.addCell(celdaTablaEtqTotal);
 		PdfPTable subTablaValoresTotal = new PdfPTable(1);
 		if(comprobante.getSubTotal()!=null){
-			agregarCelda(formatter.format(comprobante.getSubTotal().doubleValue()), font3, subTablaValoresTotal, true);
+			//agregarCelda(formatter.format(comprobante.getSubTotal().doubleValue()), font3, subTablaValoresTotal, true);
+			agregarCelda("", font3, subTablaValoresTotal, true);
 		}
 		if (existeIVATraslado)
-			agregarCelda(formatter.format(importe), font3, subTablaValoresTotal, true);
+			//agregarCelda(formatter.format(importe), font3, subTablaValoresTotal, true);
+			agregarCelda("", font3, subTablaValoresTotal,true);
 		else
 			subTablaValoresTotal.addCell(emptyCell);
 
@@ -1215,9 +1261,39 @@ public class PDFFactura {
 		celdaTablaValoresTotal.setHorizontalAlignment(Element.ALIGN_CENTER);
 		tablaLeyendaTotal.addCell(celdaTablaValoresTotal);
 		
+		
 		PdfPTable tablaPrincipalLeyendaTotal = new PdfPTable(3);
 		crearNotaDoble(tablaPrincipalLeyendaTotal,false,48,4,48,tablaLeyendaTotal);
 		document.add(tablaPrincipalLeyendaTotal);
+		// DIRECCIÓN de entrega
+				PdfPTable tablaDirs = new PdfPTable(2);
+				tablaDirs.setWidthPercentage(100);
+				tablaDirs.setWidths(new float[] { 25, 75 });
+
+				agregarCeldaConFondo("Dirección de Entrega", fontHead, tablaDirs, false);
+				agregarCeldaSinBorde(dir, font3, tablaDirs, false);
+				
+				PdfPTable tablaP = new PdfPTable(3);
+				crearNotaDoble(tablaP,true,48,4,48,tablaDirs);
+				document.add(tablaP);
+				
+				//////
+		
+		
+				// Condiciones
+				PdfPTable tablaC = new PdfPTable(2);
+				tablaC.setWidthPercentage(100);
+				tablaC.setWidths(new float[] { 25, 75 });
+
+				agregarCeldaConFondo("Condiciones", fontHead, tablaC, false);
+				agregarCeldaSinBorde(con, font3, tablaC, false);
+				
+				PdfPTable tablaP1 = new PdfPTable(3);
+				crearNotaDoble(tablaP1,true,48,4,48,tablaC);
+				document.add(tablaP1);
+				
+				//////
+	
 		
 	}
 
