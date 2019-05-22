@@ -156,12 +156,12 @@ public class GeneraTicket {
             c2.setBorder(Rectangle.NO_BORDER);
             table.addCell(c2);
             
-//            Paragraph p3 = new Paragraph(" ",f1);
-//            PdfPCell c3 = new PdfPCell(p3);
-//            c3.setHorizontalAlignment(Element.ALIGN_LEFT);
-//            c3.setColspan(3);c3.setRowspan(1);
-//            c3.setBorder(Rectangle.NO_BORDER);
-//            table.addCell(c3);
+            Paragraph p3 = new Paragraph("construrama.sanlucas@gmail.com",f1);
+            PdfPCell c3 = new PdfPCell(p3);
+            c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            c3.setColspan(6);c3.setRowspan(1);
+            c3.setBorder(Rectangle.NO_BORDER);
+            table.addCell(c3);
             
 //            Paragraph p5 = new Paragraph("RFC: ",f1);
 //            PdfPCell c5 = new PdfPCell(p5);
@@ -224,7 +224,7 @@ public class GeneraTicket {
             
             Paragraph pxx = new Paragraph("CANT",f3);
             PdfPCell cxx = new PdfPCell(pxx);
-            cxx.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cxx.setHorizontalAlignment(Element.ALIGN_CENTER);
             cxx.setColspan(2);
           //  cxx.setBorder(Rectangle.NO_BORDER);
             table2.addCell(cxx);
@@ -232,8 +232,8 @@ public class GeneraTicket {
             Paragraph p9 = new Paragraph("DESCRIPCIÓN",f3);
             PdfPCell c9 = new PdfPCell(p9);
             //c9.setBackgroundColor(black);
-            c9.setHorizontalAlignment(Element.ALIGN_LEFT);
-            c9.setColspan(6);
+            c9.setHorizontalAlignment(Element.ALIGN_CENTER);
+            c9.setColspan(5);
             c9.setRowspan(1);
           //  c9.setBackgroundColor(BaseColor.BLACK);
             table2.addCell(c9);
@@ -242,51 +242,52 @@ public class GeneraTicket {
             PdfPCell c11 = new PdfPCell(p1);
             c11.setHorizontalAlignment(Element.ALIGN_CENTER);
             //c11.setBackgroundColor(BaseColor.BLACK);
-            c11.setColspan(2);
+            c11.setColspan(3);
             table2.addCell(c11);
             
             for (Detalle en:v.getDetalles()){
             	
             	  Paragraph p10 = new Paragraph(String.valueOf(en.getCantidad()),f1);//e.getCantidad().toString()),f1);
                   PdfPCell c10 = new PdfPCell(p10);
-                  c10.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                  c10.setHorizontalAlignment(Element.ALIGN_CENTER);
                   //c10.setBackgroundColor(BaseColor.BLACK);
                   c10.setColspan(2);
                   table2.addCell(c10);
                   
                   Paragraph p12 = new Paragraph(en.getDescripcion(),f1);//e.get(0).getDescripcion(),f1);
                   PdfPCell c12 = new PdfPCell(p12);
-                  c12.setHorizontalAlignment(Element.ALIGN_LEFT);
+                  c12.setHorizontalAlignment(Element.ALIGN_CENTER);
                 //  c12.setBackgroundColor(BaseColor.BLACK);
-                  c12.setColspan(6);
+                  c12.setColspan(5);
                   table2.addCell(c12);
                   
                       
                       
-                      double importeTotal = Math.round(v.getMonto() * 100.0) / 100.0;
+                      double importeTotal = Math.round(en.getTotal() * 100.0) / 100.0;
                       Paragraph p13 = new Paragraph("$ "+ importeTotal,f1);//String.valueOf());//e.getPrecio()),f1);
                       PdfPCell c13 = new PdfPCell(p13);
-                      c13.setHorizontalAlignment(Element.ALIGN_LEFT);
+                      c13.setHorizontalAlignment(Element.ALIGN_RIGHT);
                       //c13.setBackgroundColor(BaseColor.BLACK);
-                      c13.setColspan(2);
+                      c13.setColspan(3);
                       table2.addCell(c13);
                       
                       
-                      Paragraph xx = new Paragraph(" ",f0);
-                      PdfPCell x1x = new PdfPCell(xx);
-                      x1x.setHorizontalAlignment(Element.ALIGN_LEFT);
-                      x1x.setColspan(8);x1x.setRowspan(1);
-                      x1x.setBorder(Rectangle.NO_BORDER);
-                      table2.addCell(x1x);
+//                      Paragraph xx = new Paragraph(" ",f0);
+//                      PdfPCell x1x = new PdfPCell(xx);
+//                      x1x.setHorizontalAlignment(Element.ALIGN_LEFT);
+//                      x1x.setColspan(8);x1x.setRowspan(1);
+//                      x1x.setBorder(Rectangle.NO_BORDER);
+//                      table2.addCell(x1x);
        
             	
          }      
-           // table2.addCell(x1x);
+          
             
             Paragraph vacia = new Paragraph("",f1);
             PdfPCell cv= new PdfPCell(vacia);
             cv.setHorizontalAlignment(Element.ALIGN_LEFT);
             //.setBackgroundColor(BaseColor.BLACK);
+            cv.setColspan(10);cv.setRowspan(1);
             cv.setBorder(Rectangle.NO_BORDER);
             cv.setColspan(10);
             

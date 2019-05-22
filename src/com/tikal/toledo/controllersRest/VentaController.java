@@ -130,6 +130,7 @@ public class VentaController {
 	"/add" }, method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public void add(HttpServletRequest re, HttpServletResponse rs, @RequestBody String json) throws IOException, SQLException{
 			AsignadorDeCharset.asignar(re, rs);
+			System.out.println("json"+json);
 			Venta l= (Venta)JsonConvertidor.fromJson(json, Venta.class);
 			Calendar cal=Calendar.getInstance(TimeZone.getTimeZone("America/Mexico_City"));
 //			cal.add(Calendar.HOUR_OF_DAY, -6);
