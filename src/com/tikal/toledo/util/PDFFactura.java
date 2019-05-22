@@ -1005,6 +1005,7 @@ public class PDFFactura {
 	//	 agregarChunkYNuevaLinea("R.F.C. ".concat(comprobante.getEmisor().getRfc()),font3, fraseDatosEmisor);
 	//	 agregarChunkYNuevaLinea(dom, font3, fraseDatosEmisor);
 		 agregarChunkYNuevaLinea("Tel: (722) 271 0404", font3, fraseDatosEmisor);
+		 agregarChunkYNuevaLinea("AV. SOLIDARIDAD LAS TORRES #800, SAN JERONIMO, METEPEC, MÉXICO, 52170", font3, fraseDatosEmisor);
 		 agregarChunkYNuevaLinea("construrama.sanlucas@gmail.com", font3, fraseDatosEmisor);
 		
 		 celdaDatosEmisor.setMinimumHeight(45);

@@ -429,12 +429,14 @@ public class PDFFacturaV33 {
 				imgLogo = Image.getInstance("images/sanLucas.jpg");
 			}
 			imgLogo.setScaleToFitHeight(false);
-			imgLogo.scaleToFit(200F, 37.25F);
+			  imgLogo.scaleAbsolute(75, 55);
+			//imgLogo.scaleToFit(200F, 37.25F);
 		}else {
 			System.out.println("3333");
 			imgLogo = Image.getInstance("images/sanLucas.jpg");
-			imgLogo.setScaleToFitHeight(false);
-			imgLogo.scaleToFit(200F, 37.25F);
+		//	imgLogo.setScaleToFitHeight(false);
+			  imgLogo.scaleAbsolute(80,60);
+			//imgLogo.scaleToFit(200F, 37.25F);
 		}
 		Chunk chunkLogo = new Chunk(imgLogo, 0, -35);
 		celdaLogo.addElement(chunkLogo);
@@ -448,26 +450,34 @@ public class PDFFacturaV33 {
 
 		PdfPCell celdaDatosEmisor = new PdfPCell();
 		Phrase fraseDatosEmisor = new Phrase();
-		Chunk chunkNombreEmisor = new Chunk("Construrama Casa San Lucas", font2);
-//		if(comprobante.getEmisor().getNombre()!=null){
-//			chunkNombreEmisor = new Chunk("Casa San Lucas", font2);
-//		}
-		Chunk chunkRFCEmisor = new Chunk("R.F.C. : ".concat(comprobante.getEmisor().getRfc()), font3);
-		Chunk chunkT = new Chunk("Tel: (722) 271 0404", font3);
-		fraseDatosEmisor.add(chunkNombreEmisor);
-		Chunk mail= new Chunk("construrama.sanlucas@gmail.com",font3);
-		
-		fraseDatosEmisor.add(Chunk.NEWLINE);
-			fraseDatosEmisor.add(chunkRFCEmisor);
-			fraseDatosEmisor.add(Chunk.NEWLINE);
-			fraseDatosEmisor.add(chunkT);
-			fraseDatosEmisor.add(Chunk.NEWLINE);
-			fraseDatosEmisor.add(mail);
+//		Chunk chunkNombreEmisor = new Chunk("Construrama Casa San Lucas", font2);
+////		if(comprobante.getEmisor().getNombre()!=null){
+////			chunkNombreEmisor = new Chunk("Casa San Lucas", font2);
+////		}
+//		Chunk chunkRFCEmisor = new Chunk("R.F.C. : ".concat(comprobante.getEmisor().getRfc()), font3);
+//		Chunk chunkT = new Chunk("Tel: (722) 271 0404", font3);
+//		//fraseDatosEmisor.add(chunkNombreEmisor);
+//		Chunk mail= new Chunk("construrama.sanlucas@gmail.com",font3);
+	//	
+		 agregarChunkYNuevaLinea("Construrama Casa San Lucas", font2, fraseDatosEmisor);
+		 agregarChunkYNuevaLinea("", font2, fraseDatosEmisor);
+		 agregarChunkYNuevaLinea("R.F.C. ".concat(comprobante.getEmisor().getRfc()),font3, fraseDatosEmisor);
+			//	 agregarChunkYNuevaLinea(dom, font3, fraseDatosEmisor);
+		agregarChunkYNuevaLinea("Tel: (722) 271 0404", font3, fraseDatosEmisor);
+		//agregarChunkYNuevaLinea("AV. SOLIDARIDAD LAS TORRES #800, SAN JERONIMO, METEPEC, MÉXICO, 52170", font3, fraseDatosEmisor);
+		agregarChunkYNuevaLinea("construrama.sanlucas@gmail.com", font3, fraseDatosEmisor);
+	//	fraseDatosEmisor.add(Chunk.NEWLINE);
+		//	fraseDatosEmisor.add(chunkRFCEmisor);
+		//	fraseDatosEmisor.add(Chunk.NEWLINE);
+		//	fraseDatosEmisor.add(chunkT);
+		//	fraseDatosEmisor.add(Chunk.NEWLINE);
+		//	fraseDatosEmisor.add(mail);
 		//fraseDatosEmisor.add(Chunk.NEWLINE);
 		//fraseDatosEmisor.add(chunkDomicilioEmisor);
+		celdaDatosEmisor.setPhrase(fraseDatosEmisor);
 		celdaDatosEmisor.setBorderWidth(1);
 		celdaDatosEmisor.disableBorderSide(PdfPCell.LEFT);
-		celdaDatosEmisor.addElement(fraseDatosEmisor);
+		//celdaDatosEmisor.addElement(fraseDatosEmisor);
 		celdaDatosEmisor.setHorizontalAlignment(Element.ALIGN_CENTER);
 		celdaDatosEmisor.setBorderColor(BaseColor.GRAY);
 		tablaEncabezado.addCell(celdaDatosEmisor);
@@ -488,7 +498,7 @@ public class PDFFacturaV33 {
 		PdfPTable tablaReceptorYHoraCert = new PdfPTable(3);
 		tablaReceptorYHoraCert.setWidthPercentage(100);
 		tablaReceptorYHoraCert.setWidths(new float[] { 35, 20, 45 });
-
+		
 		agregarCeldaConFondo("Nombre o razón social del Cliente", fontHead, tablaReceptorYHoraCert, false);
 		agregarCeldaConFondo("R.F.C.", fontHead, tablaReceptorYHoraCert, false);
 		String etqLugarFechaHora = null;

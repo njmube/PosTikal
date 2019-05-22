@@ -106,8 +106,9 @@ public class ComprobanteVentaFactory {
 			concepto.setUnidad(detalle.getUnidad());
 			concepto.setDescripcion(detalle.getDescripcion());
 			
-			double valorUnitarioSinIVA = detalle.getPrecioUnitario() / 1.16;
-			double importeIVA = valorUnitarioSinIVA * 0.16 * cantidad;
+		//	double valorUnitarioSinIVA = detalle.getPrecioUnitario() / 1.16;
+			double valorUnitarioSinIVA = detalle.getPrecioUnitario();
+			//double importeIVA = valorUnitarioSinIVA * 0.16 * cantidad;
 			double importe = valorUnitarioSinIVA * cantidad;
 			
 			concepto.setValorUnitario( BigDecimal.valueOf( (double)valorUnitarioSinIVA ).setScale(2, RoundingMode.HALF_UP) );
@@ -115,7 +116,8 @@ public class ComprobanteVentaFactory {
 			
 			conceptos.getConcepto().add(concepto);
 			subtotal = subtotal.add(concepto.getImporte());
-			importeTotalIVA += importeIVA;
+			importeTotalIVA += 0;
+			//importeTotalIVA += importeIVA;
 		}
 		
 		c.setSubTotal(subtotal);
