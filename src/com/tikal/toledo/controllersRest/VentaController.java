@@ -479,17 +479,18 @@ public class VentaController {
 	@RequestMapping(value = {"/sendmail" }, method = RequestMethod.POST,consumes= "application/json")
 	public void mail(HttpServletRequest re, HttpServletResponse res, @RequestBody String json) throws IOException, MessagingException, DocumentException{
 		if(Util.verificarPermiso(re, usuariodao, perfildao, 1,3)){
-		Venta venta= (Venta)JsonConvertidor.fromJson(json, Venta.class);
-		Cliente c= clientedao.cargar(venta.getIdCliente());
-		Factura f= facturadao.consultar(venta.getUuid());
-		EmailSender mailero = new EmailSender();
-		if(f!=null){
-			if(c.getEmail()!=null){
-				Comprobante cfdi= Util.unmarshallXML(f.getCfdiXML());
-				mailero.enviaFactura(c.getEmail(), f, "", cfdi.getComplemento().getAny().get(0).toString());
-				res.getWriter().print("Se envió");
+			System.out.println("esta en mail...");
+			Venta venta= (Venta)JsonConvertidor.fromJson(json, Venta.class);
+			Cliente c= clientedao.cargar(venta.getIdCliente());
+			Factura f= facturadao.consultar(venta.getUuid());
+			EmailSender mailero = new EmailSender();
+			if(f!=null){
+				if(c.getEmail()!=null){
+					Comprobante cfdi= Util.unmarshallXML(f.getCfdiXML());
+					mailero.enviaFactura(c.getEmail(), f, "", cfdi.getComplemento().getAny().get(0).toString());
+					res.getWriter().print("Se envió");
+				}
 			}
-		}
 		}else{
 			res.sendError(403);
 		}

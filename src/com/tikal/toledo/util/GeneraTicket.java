@@ -79,7 +79,7 @@ public class GeneraTicket {
     	    
     	    Font f1 = new Font();
     	  //  f1.setStyle(1);
-    	    f1.setSize(7);
+    	    f1.setSize(6);
     	    f1.setColor(BaseColor.BLACK);
     	    
     	    Font f2 = new Font();
@@ -90,7 +90,7 @@ public class GeneraTicket {
     	    
     	    Font f3 = new Font();
     	    f3.setStyle(1);
-    	    f3.setSize(6.5F);
+    	    f3.setSize(6.0F);
     	    f3.setColor(BaseColor.BLACK);
     	    f3.setStyle(Font.BOLD);
     	   
@@ -108,7 +108,7 @@ public class GeneraTicket {
 	          v1.setHorizontalAlignment(Element.ALIGN_LEFT);
 	          v1.setColspan(6);v1.setRowspan(1);
 	          v1.setBorder(Rectangle.NO_BORDER);
-	          table.addCell(v1);
+	        //  table.addCell(v1);
             
             Image imagen = Image.getInstance("WEB-INF/Images/sanLucas.jpg");
             imagen.scaleAbsolute(80, 40);
@@ -225,9 +225,16 @@ public class GeneraTicket {
             Paragraph pxx = new Paragraph("CANT",f3);
             PdfPCell cxx = new PdfPCell(pxx);
             cxx.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cxx.setColspan(2);
+            cxx.setColspan(1);
           //  cxx.setBorder(Rectangle.NO_BORDER);
             table2.addCell(cxx);
+            
+            Paragraph p = new Paragraph("UNIDAD",f3);
+            PdfPCell c = new PdfPCell(p);
+            c.setHorizontalAlignment(Element.ALIGN_CENTER);
+            c.setColspan(2);
+          //  cxx.setBorder(Rectangle.NO_BORDER);
+            table2.addCell(c);
             
             Paragraph p9 = new Paragraph("DESCRIPCIÓN",f3);
             PdfPCell c9 = new PdfPCell(p9);
@@ -242,7 +249,7 @@ public class GeneraTicket {
             PdfPCell c11 = new PdfPCell(p1);
             c11.setHorizontalAlignment(Element.ALIGN_CENTER);
             //c11.setBackgroundColor(BaseColor.BLACK);
-            c11.setColspan(3);
+            c11.setColspan(2);
             table2.addCell(c11);
             
             for (Detalle en:v.getDetalles()){
@@ -251,8 +258,15 @@ public class GeneraTicket {
                   PdfPCell c10 = new PdfPCell(p10);
                   c10.setHorizontalAlignment(Element.ALIGN_CENTER);
                   //c10.setBackgroundColor(BaseColor.BLACK);
-                  c10.setColspan(2);
+                  c10.setColspan(1);
                   table2.addCell(c10);
+                  
+                  Paragraph p11 = new Paragraph(en.getUnidad(),f1);//e.getCantidad().toString()),f1);
+                  PdfPCell cu= new PdfPCell(p11);
+                  cu.setHorizontalAlignment(Element.ALIGN_CENTER);
+                  //c10.setBackgroundColor(BaseColor.BLACK);
+                  cu.setColspan(2);
+                  table2.addCell(cu);
                   
                   Paragraph p12 = new Paragraph(en.getDescripcion(),f1);//e.get(0).getDescripcion(),f1);
                   PdfPCell c12 = new PdfPCell(p12);
@@ -268,7 +282,7 @@ public class GeneraTicket {
                       PdfPCell c13 = new PdfPCell(p13);
                       c13.setHorizontalAlignment(Element.ALIGN_RIGHT);
                       //c13.setBackgroundColor(BaseColor.BLACK);
-                      c13.setColspan(3);
+                      c13.setColspan(2);
                       table2.addCell(c13);
                       
                       

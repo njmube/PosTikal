@@ -64,7 +64,7 @@ public class ComprobanteVentaFactory {
 		comprobante.setEmisor(construirEmisor(emisor));
 		comprobante.setReceptor(construirReceptor(cliente));
 		if(venta.getDetalles()!=null){
-			construirConceptos(venta.getDetalles(), comprobante);
+			construirConceptosP(venta.getDetalles(), comprobante);
 		}
 		//comprobante.setImpuestos(construirImuestos(comprobante.getSubTotal()));
 //		BigDecimal total = comprobante.getSubTotal().add(comprobante.getImpuestos().getTotalImpuestosTrasladados());
@@ -95,6 +95,34 @@ public class ComprobanteVentaFactory {
 	}
 	
 	private void construirConceptos(List<Detalle> detalleVenta, Comprobante c) {
+		Conceptos conceptos = new Conceptos();
+		BigDecimal subtotal = new BigDecimal(0);
+		double importeTotalIVA = 0;
+		for (Detalle detalle : detalleVenta) {
+			Concepto concepto = new Concepto();
+			double cantidad = detalle.getCantidad();
+			concepto.setNoIdentificacion( Long.toString( detalle.getIdProducto() ) );
+			concepto.setCantidad( BigDecimal.valueOf( cantidad ) );
+			concepto.setUnidad(detalle.getUnidad());
+			concepto.setDescripcion(detalle.getDescripcion());
+			
+			double valorUnitarioSinIVA = detalle.getPrecioUnitario() / 1.16;
+			double importeIVA = valorUnitarioSinIVA * 0.16 * cantidad;
+			double importe = valorUnitarioSinIVA * cantidad;
+			
+			concepto.setValorUnitario( BigDecimal.valueOf( (double)valorUnitarioSinIVA ).setScale(2, RoundingMode.HALF_UP) );
+			concepto.setImporte( BigDecimal.valueOf( (double)importe ).setScale(2, RoundingMode.HALF_UP) );
+			
+			conceptos.getConcepto().add(concepto);
+			subtotal = subtotal.add(concepto.getImporte());
+			importeTotalIVA += importeIVA;
+		}
+		
+		c.setSubTotal(subtotal);
+		c.setConceptos(conceptos);
+		c.setImpuestos(construirImuestos(BigDecimal.valueOf(importeTotalIVA)));
+	}
+	private void construirConceptosP(List<Detalle> detalleVenta, Comprobante c) {
 		Conceptos conceptos = new Conceptos();
 		BigDecimal subtotal = new BigDecimal(0);
 		double importeTotalIVA = 0;

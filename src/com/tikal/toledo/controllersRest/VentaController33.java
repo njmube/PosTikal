@@ -125,6 +125,7 @@ public class VentaController33 {
 			
 			ComprobanteVO comprobanteVO= new ComprobanteVO();
 			comprobanteVO.setComprobante(c);
+			System.out.println("1 ...");
 			comprobanteVO.setEmail(cliente.getEmail());
 			RespuestaWebServicePersonalizada respuestaws = servicio33.timbrarPOS(comprobanteVO, re.getSession());
 			String uuid= respuestaws.getUuidFactura();
@@ -233,6 +234,7 @@ public class VentaController33 {
 	@RequestMapping(value = {"/sendmail" }, method = RequestMethod.POST,consumes= "application/json")
 	public void mail(HttpServletRequest re, HttpServletResponse res, @RequestBody String json) throws IOException, MessagingException, DocumentException{
 		if(Util.verificarPermiso(re, usuariodao, perfildao, 1,3)){
+			System.out.println("esta en send v33 mail...");
 		Venta venta= (Venta)JsonConvertidor.fromJson(json, Venta.class);
 		Cliente c= clientedao.cargar(venta.getIdCliente());
 		FacturaVTT f= facturaVTTDAO.consultar(venta.getUuid());

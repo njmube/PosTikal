@@ -20,6 +20,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.ExtendedColor;
@@ -135,7 +136,8 @@ public class PDFFacturaV33 {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public Document construirPdf(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Imagen imagen, Estatus estatus, String comentarios, String proveedor) throws MalformedURLException, DocumentException, IOException {
+	public Document construirPdf(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Imagen imagen, Estatus estatus, String comentarios, String proveedor) 
+			throws MalformedURLException, DocumentException, IOException {
 		List<Object> complementoTFD = comprobante.getComplemento().get(0).getAny();
 		TimbreFiscalDigital tfd = null;
 		if (complementoTFD.size() > 0) {
@@ -166,7 +168,8 @@ public class PDFFacturaV33 {
 	 * @throws IOException
 	 */
 	public Document construirPdf(Comprobante comprobante, Imagen imagen, Estatus estatus, String comentarios) throws MalformedURLException, DocumentException, IOException {
-		construirBoceto(comprobante, imagen, estatus, null, comentarios);
+		
+		//construirBoceto(comprobante, imagen, estatus, null, comentarios);
 //		construirHechoPor();
 		return document;
 	}
@@ -192,14 +195,17 @@ public class PDFFacturaV33 {
 	}
 	
 	private void construirBoceto(Comprobante comprobante, Imagen imagen, Estatus estatus, TimbreFiscalDigital tfd, String comentarios) throws MalformedURLException, DocumentException, IOException {
+		
+	    
+      
 		this.construirEncabezado(comprobante, imagen);
 		this.construirInfoReceptorYLugarFecha(comprobante, estatus, tfd);
 		this.construirUsoCFDIYDatosFiscales(comprobante, estatus, tfd);
-		
+//		
 		this.construirTablaIVA();
 		this.construirTablaConceptos(comprobante);
 		this.construirComentariosEImporteConLetra(comprobante, comentarios);
-		
+//		
 		this.construirLeyendaFiscalYTotal(comprobante, estatus);
 	}
 	
@@ -225,6 +231,7 @@ public class PDFFacturaV33 {
 	//	Image imgQRCode = Image.getInstance(bytesQRCode);
 		Image imgQRCode=null;
 		boolean finkok=false;
+	//	proveedor="finkok";
 		if(proveedor!= null) {
 			if(proveedor.compareTo("finkok")==0) {
 				finkok=true;
@@ -244,6 +251,7 @@ public class PDFFacturaV33 {
 				imgQRCode= barcodeQRCode.getImage();
 			}
 		}
+		
 		
 		
 //		 imgQRCode.setAlignment(Image.MIDDLE);
@@ -418,7 +426,7 @@ public class PDFFacturaV33 {
 		PdfPCell celdaLogo = new PdfPCell();
 		celdaLogo.setBorder(PdfPCell.NO_BORDER);
 		Image imgLogo;
-		imgLogo = Image.getInstance("images/sanLucas.jpg");
+		imgLogo = Image.getInstance("WEB-INF/Images/sanLucas.jpg");
 		if (imagen != null ) {
 //			imgLogo = Image.getInstance(new URL(imagen.getImage()));
 //			imgLogo.setScaleToFitHeight(false);
@@ -426,18 +434,19 @@ public class PDFFacturaV33 {
 			System.out.println("estatatatat");
 			if(comprobante.getEmisor().getRfc().equals("OIN980511H242")){ 
 				System.out.println("e2222");
-				imgLogo = Image.getInstance("images/sanLucas.jpg");
+				imgLogo = Image.getInstance("WEB-INF/Images/sanLucas.jpg");
 			}
 			imgLogo.setScaleToFitHeight(false);
 			  imgLogo.scaleAbsolute(75, 55);
 			//imgLogo.scaleToFit(200F, 37.25F);
 		}else {
 			System.out.println("3333");
-			imgLogo = Image.getInstance("images/sanLucas.jpg");
+			imgLogo = Image.getInstance("WEB-INF/Images/sanLucas.jpg");
 		//	imgLogo.setScaleToFitHeight(false);
 			  imgLogo.scaleAbsolute(80,60);
 			//imgLogo.scaleToFit(200F, 37.25F);
 		}
+
 		Chunk chunkLogo = new Chunk(imgLogo, 0, -35);
 		celdaLogo.addElement(chunkLogo);
 		subTablaLogo.addCell(celdaLogo);

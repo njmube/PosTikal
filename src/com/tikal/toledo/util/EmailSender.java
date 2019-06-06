@@ -57,7 +57,7 @@ public class EmailSender {
 	public void enviaFactura(String emailReceptor, Factura factura,String text, String filename) throws MessagingException, DocumentException, MalformedURLException, IOException{
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
-		
+		System.out.println("eesta en envia factura...");
 //		try {
 			Message msg = new MimeMessage(session);
 			

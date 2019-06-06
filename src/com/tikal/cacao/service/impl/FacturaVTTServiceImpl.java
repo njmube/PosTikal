@@ -245,6 +245,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 
 	@Override
 	public RespuestaWebServicePersonalizada timbrarPOS(ComprobanteVO comprobanteVO, HttpSession sesion) {
+		System.out.println("2...");
 		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(comprobanteVO.getComprobante(),
 				comprobanteVO.getComentarios(), comprobanteVO.getEmail());
 
@@ -531,10 +532,14 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 		EmailSender mailero = null;
 		FacturaVTT factura = facturaVTTDAO.consultar(uuid);
 		Comprobante cfdi = Util.unmarshallCFDI33XML(factura.getCfdiXML());
+		
 
 		UsoDeCFDI usoCFDIHB = usoDeCFDIDAO.consultarPorId(cfdi.getReceptor().getUsoCFDI().getValor());
+		System.out.println("uso de cfdi:"+usoCFDIHB);
 		RegimenFiscal regimenFiscal = regimenFiscalDAO.consultarPorId(cfdi.getEmisor().getRegimenFiscal().getValor());
+		System.out.println(" regimen fical:"+regimenFiscal);
 		FormaDePago formaDePago = formaDePagoDAO.consultar(cfdi.getFormaPago().getValor());
+		System.out.println("forma de pago:"+formaDePago);
 		TipoDeComprobante tipoDeComprobante = tipoDeComprobanteDAO.consultar(cfdi.getTipoDeComprobante().getValor());
 		if (usoCFDIHB != null && regimenFiscal != null && formaDePago != null && tipoDeComprobante != null) {
 			mailero = new EmailSender(usoCFDIHB.getDescripcion(), regimenFiscal.getDescripcion(),
@@ -596,6 +601,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	}
 
 	private RespuestaWebServicePersonalizada timbrar(Comprobante comprobante, String comentarios, String email) {
+		System.out.println("3...");
 		this.redondearCantidades(comprobante);
 		this.agregarCerosATasaOCuota(comprobante.getImpuestos());
 		
@@ -610,9 +616,11 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 		int codigoRespuesta = -1;
 		String textoCodigoRespuesta = null;
 		if (respuestaWB.get(6) instanceof Integer) {
+			System.out.println("3.1....");
 			codigoRespuesta = (int) respuestaWB.get(6);
 
 			if (codigoRespuesta == 0) {
+				System.out.println("3.2....");
 				String xmlCFDITimbrado = (String) respuestaWB.get(3);
 				Comprobante cfdiTimbrado = Util.unmarshallCFDI33XML(xmlCFDITimbrado);
 				this.incrementarFolio(cfdiTimbrado.getEmisor().getRfc(), cfdiTimbrado.getSerie());
@@ -635,11 +643,27 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 				facturaTimbrada.setComentarios(comentarios);
 				facturaVTTDAO.guardar(facturaTimbrada);
 				this.crearReporteRenglon(facturaTimbrada);
-
+				System.out.println("3.3....");
+				/////
+				
+				//EmailSender mailero = null;
+			//	FacturaVTT factura = facturaVTTDAO.consultar(uuid);
+				Comprobante cfdi = Util.unmarshallCFDI33XML(facturaTimbrada.getCfdiXML());
+				UsoDeCFDI usoCFDIHB = usoDeCFDIDAO.consultarPorId(cfdi.getReceptor().getUsoCFDI().getValor());				
+				RegimenFiscal regimenFiscal = regimenFiscalDAO.consultarPorId(cfdi.getEmisor().getRegimenFiscal().getValor());				
+				FormaDePago formaDePago = formaDePagoDAO.consultar(cfdi.getFormaPago().getValor());				
+				TipoDeComprobante tipoDeComprobante = tipoDeComprobanteDAO.consultar(cfdi.getTipoDeComprobante().getValor());
+				System.out.println("uso de cfdi:"+usoCFDIHB.getDescripcion());
+				System.out.println(" regimen fical:"+regimenFiscal.getDescripcion());
+				System.out.println("forma de pago:"+formaDePago.getDescripcion());
+				System.out.println("tipo comprobante:"+tipoDeComprobante.getDescripcion());
+				//////
 				EmailSender mailero = new EmailSender();
 				Imagen imagen = imagenDAO.get("AAA010101AAA");
 				if (email != null) {
-					mailero.enviaFactura(email, facturaTimbrada, "", imagen, cfdiTimbrado);
+					System.out.println("3.3333....");
+					
+					mailero.enviaFactura__(email, facturaTimbrada, "", imagen, cfdiTimbrado,usoCFDIHB.getDescripcion(), regimenFiscal.getDescripcion(),formaDePago.getDescripcion(),tipoDeComprobante.getDescripcion());
 				}
 				respPersonalizada = new RespuestaWebServicePersonalizada();
 				respPersonalizada.setMensajeRespuesta("¡La factura se timbró con éxito!");
@@ -647,11 +671,14 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 				return respPersonalizada;
 			} // FIN TIMBRADO EXITOSO
 
+			
 			// CASO DE ERROR EN EL TIMBRADO
 			else {
+				System.out.println("3.5....");
 				return construirMensajeError(respuestaWB);
 			}
 		} else {
+			System.out.println("3.6....");
 			textoCodigoRespuesta = (String) respuestaWB.get(1);
 			return construirMensajeError(respuestaWB);
 		}
